@@ -21,6 +21,14 @@ const validateSignup = [
         .not()
         .isEmail()
         .withMessage('Username cannot be an email.'),
+    check('firstName')
+        .not()
+        .isEmail()
+        .withMessage('Firstname cannot be an email.'),
+    check('lastName')
+        .not()
+        .isEmail()
+        .withMessage('Lastname cannot be an email.'),
     check('password')
         .exists({ checkFalsy: true })
         .isLength({ min: 6})
@@ -38,6 +46,8 @@ router.post(
   
       const safeUser = {
         id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
         username: user.username,
       };
