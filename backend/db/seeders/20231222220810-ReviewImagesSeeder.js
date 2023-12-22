@@ -1,0 +1,157 @@
+'use strict';
+
+const { ReviewImages } = require('../models');
+
+const validReviewImages = [
+  {
+    reviewId: 1,
+    url: "https://randomimage.com/123"
+  },
+  {
+    reviewId: 1,
+    url: "https://randomimage.com/456"
+  },
+  {
+    reviewId: 1,
+    url: "https://randomimage.com/543"
+  },
+  {
+    reviewId: 2,
+    url:"https://randomimage.com/125"
+  },
+  {
+    reviewId: 2,
+    url: "https://randomimage.com/095"
+  },
+  {
+    reviewId: 2,
+    url: "https://randomimage.com/943"
+  },
+  {
+    reviewId: 3,
+    url: "https://randomimage.com/345"
+  },
+  {
+    reviewId: 3,
+    url: "https://randomimage.com/157"
+  },
+  {
+    reviewId: 3,
+    url: "https://randomimage.com/653"
+  },
+  {
+    reviewId: 4,
+    url: "https://randomimage.com/347"
+  },
+  {
+    reviewId: 4,
+    url: "https://randomimage.com/740"
+  },
+  {
+    reviewId: 4,
+    url: "https://randomimage.com/260"
+  },
+  {
+    reviewId: 5,
+    url: "https://randomimage.com/360"
+  },
+  {
+    reviewId: 5,
+    url: "https://randomimage.com/364"
+  },
+  {
+    reviewId: 5,
+    url: "https://randomimage.com/365"
+  },
+  {
+    reviewId: 6,
+    url: "https://randomimage.com/170"
+  },
+  {
+    reviewId: 6,
+    url: "https://randomimage.com/272"
+  },
+  {
+    reviewId: 6,
+    url: "https://randomimage.com/202"
+  },
+  {
+    reviewId: 7,
+    url: "https://randomimage.com/404"
+  },
+  {
+    reviewId: 7,
+    url: "https://randomimage.com/181"
+  },
+  {
+    reviewId: 7,
+    url: "https://randomimage.com/820"
+  },
+  {
+    reviewId: 8,
+    url: "https://randomimage.com/507"
+  },
+  {
+    reviewId: 8,
+    url: "https://randomimage.com/340"
+  },
+  {
+    reviewId: 8,
+    url: "https://randomimage.com/180"
+  },
+  {
+    reviewId: 9,
+    url: "https://randomimage.com/150"
+  },
+  {
+    reviewId: 9,
+    url: "https://randomimage.com/457"
+  },
+  {
+    reviewId: 9,
+    url: "https://randomimage.com/809"
+  },
+]
+
+
+/** @type {import('sequelize-cli').Migration} */
+module.exports = {
+  async up (queryInterface, Sequelize) {
+    /**
+     * Add seed commands here.
+     *
+     * Example:
+     * await queryInterface.bulkInsert('People', [{
+     *   name: 'John Doe',
+     *   isBetaMember: false
+     * }], {});
+    */
+    try {
+      await ReviewImages.bulkCreate(validReviewImages, {
+        validate: true
+      }); 
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  },
+
+  async down (queryInterface, Sequelize) {
+    /**
+     * Add commands to revert seed here.
+     *
+     * Example:
+     * await queryInterface.bulkDelete('People', null, {});
+     */
+    for (let image of validReviewImages){
+      try{
+        await ReviewImages.destroy({
+          where: image
+        }); 
+      } catch (err) {
+        console.log(err);
+        throw err;
+      }
+    }
+  }
+};
