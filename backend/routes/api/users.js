@@ -44,21 +44,21 @@ router.post(
       const hashedPassword = bcrypt.hashSync(password);
       const user = await User.create({ firstName, lastName, email, username, hashedPassword });
   
-      // const safeUser = {
-      //   id: user.id,
-      //   firstName: user.firstName,
-      //   lastName: user.lastName,
-      //   email: user.email,
-      //   username: user.username,
-      // };
-  
-      await setTokenCookie(res, user);
-  
-      return res.json({
+      const safeUser = {
         id: user.id,
         firstName: user.firstName,
         lastName: user.lastName,
-        email: user.email
+        email: user.email,
+        username: user.username,
+      };
+  
+      await setTokenCookie(res, safeUser);
+  
+      return res.json({
+        id: safeUser.id,
+        firstName: safeUser.firstName,
+        lastName: safeUser.lastName,
+        email: safeUser.email
       });
     }
   );

@@ -81,7 +81,10 @@ router.get(
           username: user.username,
         };
         return res.json({
-          user: safeUser
+          id: safeUser.id,
+          firstName: safeUser.firstName,
+          lastName: safeUser.lastName,
+          email: safeUser.email
         });
       } else return res.json({ user: null });
     }
