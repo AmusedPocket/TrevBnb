@@ -1,6 +1,11 @@
 'use strict';
 
-const { ReviewImages } = require('../models');
+const { ReviewImage } = require('../models');
+
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;  // define your schema in options object
+};
 
 const validReviewImages = [
   {
@@ -127,7 +132,7 @@ module.exports = {
      * }], {});
     */
     try {
-      await ReviewImages.bulkCreate(validReviewImages, {
+      await ReviewImage.bulkCreate(validReviewImages, {
         validate: true
       }); 
     } catch (err) {
@@ -143,15 +148,10 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    for (let image of validReviewImages){
-      try{
-        await ReviewImages.destroy({
-          where: image
-        }); 
-      } catch (err) {
-        console.log(err);
-        throw err;
-      }
-    }
+    options.tableName = 'ReviewImages';
+    const Op = Sequelize.Op;
+    return queryInterface.bulkDelete(options, {
+      id: { [Op.in]: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27] }
+    }, {});
   }
 };

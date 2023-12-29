@@ -1,7 +1,10 @@
 'use strict';
 
 const { Review } = require('../models');
-
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;  // define your schema in options object
+}
 const validReviews = [
   {
     spotId: 1,
@@ -82,21 +85,10 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
-    for(let review of validReviews){
-      try{
-        await Review.destroy({
-          where: review
-        })
-      } catch (err) {
-        console.log(err);
-        throw err;
-      }
-    }
+    options.tableName = 'Reviews';
+    const Op = Sequelize.Op;
+    return queryInterface.bulkDelete(options, {
+      id: { [Op.in]: [1, 2, 3, 4, 5, 6, 7, 8, 9] }
+    }, {});
   }
 };

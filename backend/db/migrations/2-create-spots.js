@@ -41,7 +41,7 @@ module.exports = {
         type: Sequelize.DECIMAL,
         allowNull: false
       },
-      Ing: {
+      lng: {
         type: Sequelize.DECIMAL,
         allowNull: false
       },

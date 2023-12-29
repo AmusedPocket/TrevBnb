@@ -1,28 +1,33 @@
 'use strict';
 
 const { User } = require('../models');
+const bcrypt = require("bcryptjs");
 
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;  // define your schema in options object
+}
 const validUsers = [
   {
     username: 'cheesepants',
     firstName: 'Wifey',
     lastName: 'Irving',
     email: "wifey@test.com",
-    hashedPassword: 12345
+    hashedPassword: bcrypt.hashSync('password')
   },
   {
     username: 'kDog',
     firstName: "Kevin",
     lastName: "Irving",
     email: "kdogrocks@stinkybutt.com",
-    hashedPassword: 542309
+    hashedPassword: bcrypt.hashSync('password2')
   },
   {
     username: 'bCarrot',
     firstName: "Bradley",
     lastName: "Bo'jax",
     email: 'bCarrotInYa@fluffybutt.com',
-    hashedPassword: 4596970
+    hashedPassword: bcrypt.hashSync('password3')
   },
 ];
 
@@ -40,15 +45,10 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    for(let user of validUsers){
-      try {
-        await User.destroy({
-          where: user
-        }); 
-      } catch (err){
-        console.log(err);
-        throw err;
-      }
-    }
+    options.tableName = 'Users';
+    const Op = Sequelize.Op;
+    return queryInterface.bulkDelete(options, {
+      username: { [Op.in]: ['cheesepants', 'kDog', 'bCarrot'] }
+    }, {});
   }
 };
