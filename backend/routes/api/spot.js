@@ -4,7 +4,7 @@ const router = express.Router();
 
 const { setTokenCookie, restoreUser, requireAuth } = require('../../utils/auth');
 const { Spot, SpotImage, Review, sequelize, Sequelize, User } = require('../../db/models');
-const { Op } = require('sequelize');
+const { Op, ValidationError } = require('sequelize');
 
 
 //Get current spots by the user
@@ -109,7 +109,7 @@ router.get('/', async (req, res) => {
 router.post('/:spotId/images', requireAuth, async (req, res, next) => {
     let spot = await Spot.findByPk(req.params.spotId);
     if(!spot){
-        const err = new Error("Spot does not exist");
+        const err = new Error("Spot couldn't be found");
         err.status = 404;
         return next(err);
     };
@@ -130,7 +130,13 @@ router.post('/:spotId/images', requireAuth, async (req, res, next) => {
         return res.json({message: "Must be the owner of the spot to post image"})
     }
 
-    res.json(newImg.toJSON());
+    const result = newImg.toJSON()
+
+    res.json({
+        id: result.id,
+        url: result.url,
+        preview: result.preview
+    });
 })
 
 //Create a new spot
@@ -161,7 +167,6 @@ router.get('/:id', async (req, res, next) => {
     });
 
     if(!spot){
-        console.log("no spot")
         const err = new Error("Spot couldn't be found")
         err.status = 404;
         next(err);
@@ -187,14 +192,54 @@ router.get('/:id', async (req, res, next) => {
 });
 
 //Edit a spot
-router.put('/:spotId', requireAuth, async (req, res, next) => {
+router.put('/:spotId', requireAuth,  async (req, res, next) => {
+    const { address, city, state, country, lat, lng, name, description, price } = req.body;
+    if(price < 0){
+        const err = new Error("Price per day must be a positive number");
+        err.status = 400;
+        next(err);
+    };
+    if(!address){
+        const err = new Error("Street address is required");
+        err.status = 400;
+        next(err);
+    };
+    if(!city){
+        const err = new Error("City is required");
+        err.status = 400;
+        next(err);
+    };
+    if(!state){
+        const err = new Error("State is required");
+        err.status = 400;
+        next(err);
+    };
+    if(!country){
+        const err = new Error("Country is required");
+        err.status = 400;
+        next(err);
+    };
     let spot = await Spot.findByPk(req.params.spotId);
     if(!spot){
         const err = new Error("Spot couldn't be found");
         err.status = 404;
         next(err);
+    };
+    if(lat > 90 || lat < -90){
+        const err = new Error("Latitude must be within -90 and 90");
+        err.status = 404;
+        next(err);
+    };
+    if(lng > 180 || lng < -180){
+        const err = new Error("Longitude must be within -180 and 180");
+        err.status = 404;
+        next(err);
+    };
+    if(!description){
+        const err = new Error("Description is required");
+        err.status = 404;
+        next(err);
     }
-
     let ownerIdObj = await Spot.findByPk(req.params.spotId, {
         attributes: ['ownerId']
     })
@@ -208,6 +253,31 @@ router.put('/:spotId', requireAuth, async (req, res, next) => {
     await spot.update({...req.body});
 
     return res.json(spot.toJSON())
+});
+
+//Delete a spot
+router.delete('/:spotId', requireAuth, async (req, res) => {
+    
+    let spot = await Spot.findByPk(req.params.spotId);
+
+    if(!spot){
+        res.status = 404;
+        return res.json({message: "Spot couldn't be found"});
+    };
+
+    let ownerIdObj = await Spot.findByPk(req.params.spotId, {
+        attributes: ['ownerId']
+    });
+
+    let ownerIdNum = ownerIdObj.toJSON().ownerId;
+    if(ownerIdNum !== req.user.id){
+        res.status = 400;
+        return res.json({ message: "Must be owner to delete spot "});
+    };
+  
+    await spot.destroy();
+
+    return res.json({message: "Successfully deleted"});
 })
 
 //Error Handler
