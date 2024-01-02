@@ -55,10 +55,13 @@ router.post(
       await setTokenCookie(res, safeUser);
   
       return res.json({
-        id: safeUser.id,
-        firstName: safeUser.firstName,
-        lastName: safeUser.lastName,
-        email: safeUser.email
+        user: {
+          id: safeUser.id,
+          firstName: safeUser.firstName,
+          lastName: safeUser.lastName,
+          email: safeUser.email,
+          username: safeUser.username
+      }
       });
     }
   );
