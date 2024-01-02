@@ -54,10 +54,12 @@ router.post( '/', validateLogin, async (req, res, next) => {
     await setTokenCookie(res, safeUser);
 
     return res.json({
-        id: safeUser.id,
-        firstName: safeUser.firstName,
-        lastname: safeUser.lastName,
-        email: safeUser.email
+        user: {
+            id: safeUser.id,
+            firstName: safeUser.firstName,
+            lastName: safeUser.lastName,
+            email: safeUser.email
+        }
     });
 });
 
@@ -81,10 +83,14 @@ router.get(
           username: user.username,
         };
         return res.json({
-          id: safeUser.id,
-          firstName: safeUser.firstName,
-          lastName: safeUser.lastName,
-          email: safeUser.email
+            user: {
+                id: safeUser.id,
+                firstName: safeUser.firstName,
+                lastName: safeUser.lastName,
+                email: safeUser.email,
+                username: safeUser.username
+            }
+          
         });
       } else return res.json({ user: null });
     }
