@@ -18,15 +18,11 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       Review.belongsTo(models.User, {
-        foreignKey: 'userId',
-        onDelete: 'CASCADE',
-        hooks: true
+        foreignKey: 'userId'
       });
 
       Review.belongsTo(models.Spot, {
-        foreignKey: "spotId",
-        onDelete: 'CASCADE',
-        hooks: true
+        foreignKey: "spotId"
       });
     }
   }
