@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const { check } = require('express-validator');
 
 
 const { setTokenCookie, restoreUser, requireAuth } = require('../../utils/auth');
 const { Spot, SpotImage, Review, sequelize, Sequelize, User, ReviewImage } = require('../../db/models');
 const { Op, ValidationError } = require('sequelize');
+const { handleValidationErrors } = require('../../utils/validation');
 
 
 //Get current spots by the user
@@ -139,12 +141,53 @@ router.post('/:spotId/images', requireAuth, async (req, res, next) => {
     });
 })
 
+const validateSpot = [
+    check('address')
+        .notEmpty()
+        .withMessage('Street address is required'),
+    check('city')
+        .notEmpty()
+        .withMessage('City is required'),
+    check('state')
+        .notEmpty()
+        .withMessage('State is required'),
+    check('country')
+        .notEmpty()
+        .withMessage('Country is required'),
+    check('lat')
+        .notEmpty()
+        .isFloat({min: -90, max: 90})
+        .withMessage('Latitude must be within -90 and 90'),
+    check('lng')
+        .notEmpty()
+        .isFloat({min: -180, max: 180})
+        .withMessage('Longitude must be within -90 and 90'), 
+    check('name')
+        .notEmpty().withMessage("Name is required")
+        .isLength({max: 50})
+        .withMessage('Name must be less than 50 characters'),
+    check('price')
+        .isFloat({min: 0})
+        .withMessage("Price per day must be a positive number"),
+    check('description')
+        .notEmpty()
+        .withMessage('Description is required'),
+    handleValidationErrors
+];
+
 //Create a new spot
-router.post('/', requireAuth, async (req, res) => {
- 
+router.post('/', validateSpot, requireAuth, async (req, res) => {
+   
+    let spot = await Spot.findByPk(req.params.spotId);
+    if(!spot){
+        const err = new Error("Spot couldn't be found");
+        err.status = 404;
+        next(err);
+    };
+    
     const newSpot = await Spot.create({
         ...req.body
-    })
+    });
    
     res.json(newSpot)
 })
@@ -192,54 +235,9 @@ router.get('/:id', async (req, res, next) => {
 });
 
 //Edit a spot
-router.put('/:spotId', requireAuth,  async (req, res, next) => {
-    const { address, city, state, country, lat, lng, name, description, price } = req.body;
-    if(price < 0){
-        const err = new Error("Price per day must be a positive number");
-        err.status = 400;
-        next(err);
-    };
-    if(!address){
-        const err = new Error("Street address is required");
-        err.status = 400;
-        next(err);
-    };
-    if(!city){
-        const err = new Error("City is required");
-        err.status = 400;
-        next(err);
-    };
-    if(!state){
-        const err = new Error("State is required");
-        err.status = 400;
-        next(err);
-    };
-    if(!country){
-        const err = new Error("Country is required");
-        err.status = 400;
-        next(err);
-    };
+router.put('/:spotId', validateSpot, requireAuth,  async (req, res, next) => {
     let spot = await Spot.findByPk(req.params.spotId);
-    if(!spot){
-        const err = new Error("Spot couldn't be found");
-        err.status = 404;
-        next(err);
-    };
-    if(lat > 90 || lat < -90){
-        const err = new Error("Latitude must be within -90 and 90");
-        err.status = 404;
-        next(err);
-    };
-    if(lng > 180 || lng < -180){
-        const err = new Error("Longitude must be within -180 and 180");
-        err.status = 404;
-        next(err);
-    };
-    if(!description){
-        const err = new Error("Description is required");
-        err.status = 404;
-        next(err);
-    }
+    
     let ownerIdObj = await Spot.findByPk(req.params.spotId, {
         attributes: ['ownerId']
     })
@@ -338,10 +336,10 @@ router.post('/:spotId/reviews', requireAuth, async (req, res) => {
 })
 
 //Error Handler
-router.use((err, req, res, next) => {
+// router.use((err, req, res, next) => {
     
-    res.status(err.status || 500)
-    res.send({error: err.message});
-});
+//     res.status(err.status || 500)
+//     res.send({error: err.message});
+// });
 
 module.exports = router;

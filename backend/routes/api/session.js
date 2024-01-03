@@ -14,17 +14,17 @@ const validateLogin = [
     check('credential')
         .exists({checkFalsy: true})
         .notEmpty()
-        .withMessage('Please provide a valid email or username.'),
+        .withMessage("Email or username is required"),
     check('password')
         .exists({checkFalsy: true})
-        .withMessage('Please provide a password.'),
+        .withMessage("Password is required"),
     handleValidationErrors
 ];
 
 router.post( '/', validateLogin, async (req, res, next) => {
     const { credential, password } = req.body;
     
- 
+    
 
     const user = await User.unscoped().findOne({
         where: {
@@ -94,7 +94,6 @@ router.get(
       } else return res.json({ user: null });
     }
   );
-
 
 
 module.exports = router;
