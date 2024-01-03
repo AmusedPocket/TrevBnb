@@ -58,17 +58,20 @@ router.post( '/', validateLogin, async (req, res, next) => {
             id: safeUser.id,
             firstName: safeUser.firstName,
             lastName: safeUser.lastName,
-            email: safeUser.email
+            email: safeUser.email,
+            username: safeUser.username
         }
     });
 });
 
+//sign out user
 router.delete('/', (_req, res) => {
     res.clearCookie('token');
     return res.json({message: 'success'});
  }
 );
 
+//get current user
 router.get(
     '/',
     restoreUser,
