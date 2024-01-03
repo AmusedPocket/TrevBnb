@@ -44,11 +44,13 @@ router.get('/current', requireAuth, async (req, res) => {
             },
             attributes: ['url', 'preview']
         })
-       
-        let spotImg = previewImage.toJSON();
-        let spot = reviewArr[i]['Spot'];
-        spot.previewImage = spotImg.url;
-        reviewArr[i].Spot = spot;
+        if(!previewImage) reviewArr[i]['Spot']['id'].previewImage = "no preview image set";
+        if(previewImage){
+            let spotImg = previewImage.toJSON();
+            let spot = reviewArr[i]['Spot'];
+            spot.previewImage = spotImg.url;
+            reviewArr[i].Spot = spot;
+        }
     };
 
 
