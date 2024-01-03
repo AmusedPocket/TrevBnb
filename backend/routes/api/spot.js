@@ -3,7 +3,7 @@ const router = express.Router();
 
 
 const { setTokenCookie, restoreUser, requireAuth } = require('../../utils/auth');
-const { Spot, SpotImage, Review, sequelize, Sequelize, User } = require('../../db/models');
+const { Spot, SpotImage, Review, sequelize, Sequelize, User, ReviewImage } = require('../../db/models');
 const { Op, ValidationError } = require('sequelize');
 
 
@@ -278,6 +278,63 @@ router.delete('/:spotId', requireAuth, async (req, res) => {
     await spot.destroy();
 
     return res.json({message: "Successfully deleted"});
+})
+
+//Get all reviews by a spot's id
+router.get('/:spotId/reviews', async (req, res) => {
+    const spotId = req.params.spotId;
+    const spot = await Spot.findByPk(spotId);
+    if(!spot){
+        return res.status(404).json({message: "Spot couldn't be found"})
+    }
+    const reviews = await Review.findAll({
+        where: {
+            spotId: spotId
+        },
+        include: [{
+            model: User,
+            attributes: ['id', 'firstName', 'lastName']
+        }, {
+            model: ReviewImage,
+            attributes: ['id', 'url']
+        }]
+    })
+
+    res.json({Reviews: reviews})
+})
+
+//Create a review for a spot based on the spot id's
+router.post('/:spotId/reviews', requireAuth, async (req, res) => {
+    const spotId = req.params.spotId;
+    const spot = await Spot.findByPk(spotId);
+    if(!spot){
+        return res.status(404).json({message: "Spot couldn't be found"})
+    };
+    const {review, stars} = req.body;
+    if(!review){
+        return res.status(400).json({message: "Review text is required"})
+    };
+    if(!Number.isInteger(stars) || stars < 1 || stars > 5){
+        return res.status(400).json({message: "Stars must be an integer from 1 to 5"})
+    };
+
+    const userReview = await Review.findOne({
+        where: {
+            userId: req.user.id
+        }
+    });
+
+    if(userReview){
+        return res.status(500).json({message: "User already has a review for this spot"})
+    };
+
+    const newReview = await Review.create({
+        spotId: Number(spotId),
+        userId: req.user.id,
+        ...req.body
+    });
+
+    res.json(newReview)
 })
 
 //Error Handler
