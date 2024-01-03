@@ -9,7 +9,7 @@ const { Op, ValidationError } = require('sequelize');
 //get all reviews by a user
 router.get('/current', requireAuth, async (req, res) => {
     const user = req.user.id;
-    console.log("test")
+    
     const reviews = await Review.findAll({
         where: {
             userId: user
@@ -108,5 +108,22 @@ router.put('/:reviewId', requireAuth, async (req, res) => {
     res.json(reviewLocator)
 })
 
+//delete a review by review id
+router.delete('/:reviewId', requireAuth, async (req, res) => {
+    const review = await Review.findByPk(req.params.reviewId);
+
+    if(!review){
+        return res.status(404).json({message: "Review couldn't be found"})
+    }
+   
+    if(req.user.id !== review.userId){
+        return res.status(403).json({message: "Review must belong to the current user"})
+    };
+
+    await review.destroy();
+
+    return res.json({message: "Successfully deleted"})
+
+})
 
 module.exports = router;
