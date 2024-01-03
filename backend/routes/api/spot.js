@@ -61,11 +61,58 @@ router.get('/current', async (req, res) => {
     res.json(result);
 })
 
-//Get current spots, adds average review and preview to them
-router.get('/', async (req, res) => {
-   
+const validateGet = [
+    check('page')
+        .default(1)
+        .isInt({min: 1, max: 10})
+        .withMessage("Page must be greater than or equal to 1"),
+    check('size')
+        .default(1)
+        .isInt({min: 1, max: 20})
+        .withMessage("Size must be greater than or equal to 1"),
+    check('maxLat')
+        .optional()
+        .isFloat()
+        .withMessage("Maximum latitude is invalid"),
+    check('minLat')
+        .optional()
+        .isFloat()
+        .withMessage("Minimum latitude is invalid"),
+    check('maxLng')
+        .optional()
+        .isFloat()
+        .withMessage("Maximum longitude is invalid"),
+    check('minLng')
+        .optional()
+        .isFloat()
+        .withMessage("Minimum longitude is invalid"),
+    check('minPrice')
+        .optional()
+        .isFloat({min: 0})
+        .withMessage("Minimum price must be greater than or equal to 0"),
+    check('maxPrice')
+        .optional()
+        .isFloat({min: 0})
+        .withMessage("Minimum price must be greater than or equal to 0"),
+    handleValidationErrors
+];
 
-    let spots = await Spot.findAll();
+//Get current spots, adds average review and preview to them
+router.get('/', validateGet, async (req, res, next) => {
+   
+    const {page, size} = req.query;
+
+    const pagination = {};
+
+    pagination.limit = size;
+
+    if(page > 1){
+        pagination.offset = size * (page - 1);
+    }
+
+
+
+    let spots = await Spot.findAll({...pagination});
     let spotsList = [];
 
     spots.forEach((spot) => {
@@ -104,7 +151,8 @@ router.get('/', async (req, res) => {
 
     let result = {};
     result.Spots = spotsList;
-
+    result.page = Number(page);
+    result.size = Number(size);
     res.json(result);
 })
 
@@ -375,6 +423,7 @@ router.get('/:spotId/bookings', requireAuth, async(req, res) => {
     res.json(resObj);
 });
 
+//Post a new booking
 router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
     const spot = await Spot.findByPk(req.params.spotId);
     if(!spot){
@@ -431,7 +480,7 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
         if(startDate <= bookingEnd && bookingEnd <= endDate){
             errors.endDate = "End date conflicts with an existing booking";
         };
-        if(bookingStart <= startDate && bookingEnd <= endDate){
+        if(bookingStart <= startDate && bookingEnd >= endDate){
             errors.startDate = "Start date conflicts with an existing booking";
             errors.endDate = "End date conflicts with an existing booking";
         }
@@ -452,6 +501,13 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
     });
 
     res.json(newBooking);
+});
+
+router.use((err, req, res, next) => {
+    res.status(err.status || 500)
+    res.send({
+        message: "Bad Request"
+    });
 })
 
 
