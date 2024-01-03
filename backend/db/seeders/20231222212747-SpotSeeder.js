@@ -42,7 +42,7 @@ const validSpots = [
     lat: 69.504,
     lng: 34.509,
     name: "Heaven",
-    description: "Heave on earth",
+    description: "Heaven on earth",
     price: 5940234
   },
 ]; 
