@@ -53,14 +53,14 @@ router.put('/:bookingId', requireAuth, async(req, res) => {
    
     //find the booking to edit
     const booking = await Booking.findByPk(req.params.bookingId);
-    const oldStart = new Date(booking.startDate).getTime();
+     //if booking can't be found, error
+     if(!booking){
+        return res.status(404).json({message: "Booking couldn't be found"})
+        };
     const oldEnd = new Date(booking.endDate).getTime();
-  
     
-    //if booking can't be found, error
-    if(!booking){
-    return res.status(404).json({message: "Booking couldn't be found"})
-    };
+    
+   
  
      //if booking doesn't belong to the request user, error
      if(booking.userId !== req.user.id){
@@ -71,10 +71,11 @@ router.put('/:bookingId', requireAuth, async(req, res) => {
     const newEnd = new Date(req.body.endDate).getTime();
     const newStart = new Date(req.body.startDate).getTime();
     //generates current time 
-    const now = new Date().getTime();
+    const now = Date.now();
+    
 
     //if past booking end date is occured prior to now (less than now), error
-    if(oldEnd <= now || oldStart <= now){
+    if(oldEnd <= now || newEnd <= now || newStart <= now){
         return res.status(403).json({message: "Past bookings can't be modified"})
     };
 
