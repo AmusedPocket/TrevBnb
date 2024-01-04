@@ -67,7 +67,7 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
         return res.status(404).json({message: "Review couldn't be found"})
     };
     if(review.userId !== req.user.id){
-        return res.status(403).json({message: "Review must belong to the owner"})
+        return res.status(403).json({message: "Forbidden"})
     };
     const imageCount = await ReviewImage.findAll({
         where: {
@@ -104,7 +104,7 @@ router.put('/:reviewId', requireAuth, validateReview, async (req, res) => {
         return res.status(404).json({message: "Review couldn't be found"})
     };
     if(reviewLocator.userId !== req.user.id){
-        return res.status(403).json({message: "Review must belong to the current user"})
+        return res.status(403).json({message: "Forbidden"})
     };
     
     await reviewLocator.update({...req.body});
@@ -121,7 +121,7 @@ router.delete('/:reviewId', requireAuth, async (req, res) => {
     }
    
     if(req.user.id !== review.userId){
-        return res.status(403).json({message: "Review must belong to the current user"})
+        return res.status(403).json({message: "Forbidden"})
     };
 
     await review.destroy();

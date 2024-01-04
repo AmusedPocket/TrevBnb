@@ -19,7 +19,7 @@ router.delete('/:imageId', requireAuth, async(req, res) => {
     };
 
     if(review.Review.userId !== req.user.id){
-        return res.status(403).json({message: "Review must belong to the current user"})
+        return res.status(403).json({message: "Forbidden"})
     };
 
     await review.destroy();

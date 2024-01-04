@@ -172,12 +172,10 @@ router.post('/:spotId/images', requireAuth, async (req, res, next) => {
     })
 
     let ownerIdNumber = ownerIdObj.toJSON().ownerId;
-    console.log(ownerIdNumber)
-    console.log(req.user.id)
 
     if(ownerIdNumber !== req.user.id){
-        res.status(400);
-        return res.json({message: "Must be the owner of the spot to post image"})
+        res.status(403);
+        return res.json({message: "Forbidden"})
     }
 
     let newImg = await SpotImage.create({
@@ -298,8 +296,8 @@ router.put('/:spotId', requireAuth, validateSpot,  async (req, res) => {
 
     let ownerIdNum = ownerIdObj.toJSON().ownerId;
     if(ownerIdNum !== req.user.id){
-        res.status(400);
-        return res.json({ message: "Must be owner to update spot "});
+        res.status(403);
+        return res.json({ message: "Forbidden"});
     }
 
     await spot.update({...req.body});
@@ -324,8 +322,7 @@ router.delete('/:spotId', requireAuth, async (req, res) => {
 
     let ownerIdNum = ownerIdObj.toJSON().ownerId;
     if(ownerIdNum !== req.user.id){
-        res.status = 400;
-        return res.json({ message: "Must be owner to delete spot "});
+        return res.status(403).json({message: "Forbidden"})
     };
   
     await spot.destroy();
@@ -435,7 +432,7 @@ router.post('/:spotId/bookings', requireAuth, async (req, res) => {
 
     if(spot.ownerId === req.user.id){
         res.status(403);
-        return res.json({message: "Spot cannot belong to the owner"});
+        return res.json({message: "Forbidden"});
     };
 
     const bookings = await Booking.findAll({where: {spotId: req.params.spotId}, attributes: ['startDate', 'endDate']});

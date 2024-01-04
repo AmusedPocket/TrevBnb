@@ -64,7 +64,7 @@ router.put('/:bookingId', requireAuth, async(req, res) => {
  
      //if booking doesn't belong to the request user, error
      if(booking.userId !== req.user.id){
-        return res.status(403).json({message: "Booking must belong to the current user to edit"})
+        return res.status(403).json({message: "Forbidden"})
     };
 
      //finds the incoming booking's end date
@@ -140,7 +140,7 @@ router.delete('/:bookingId', requireAuth, async(req, res) => {
     const spot = await Spot.findByPk(booking.spotId);
     
     if(booking.userId !== req.user.id && spot.ownerId !== req.user.id){
-        return res.status(403).json({message: "Booking must belong to the current user or the Spot must belong to the current user"})
+        return res.status(403).json({message: "Forbidden"})
     };
 
     const now = new Date().getTime();
