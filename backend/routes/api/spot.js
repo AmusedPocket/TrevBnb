@@ -11,7 +11,7 @@ const { handleValidationErrors } = require('../../utils/validation');
 
 
 //Get current spots by the user
-router.get('/current', async (req, res) => {
+router.get('/current', requireAuth, async (req, res) => {
     const user = req.user.id;
     const userSpots = await Spot.findAll({
         where: {
@@ -212,7 +212,7 @@ const validateSpot = [
     check('lng')
         .notEmpty()
         .isFloat({min: -180, max: 180})
-        .withMessage('Longitude must be within -90 and 90'), 
+        .withMessage('Longitude must be within -180 and 180'), 
     check('name')
         .notEmpty().withMessage("Name is required")
         .isLength({max: 50})
@@ -257,9 +257,8 @@ router.get('/:id', async (req, res, next) => {
     });
 
     if(!spot){
-        const err = new Error("Spot couldn't be found")
-        err.status = 404;
-        next(err);
+        res.status(404);
+        return res.json({message: "Spot couldn't be found"});
     }
 
     const rating = await Review.findOne({
@@ -282,12 +281,11 @@ router.get('/:id', async (req, res, next) => {
 });
 
 //Edit a spot
-router.put('/:spotId', validateSpot, requireAuth,  async (req, res, next) => {
+router.put('/:spotId', validateSpot, requireAuth,  async (req, res) => {
     let spot = await Spot.findByPk(req.params.spotId);
     if(!spot){
-        res.status(404)
-        const resObj = {message: "Spot couldn't be found"};
-        return res.json(resObj);
+        res.status(404);
+        return res.json({message: "Spot couldn't be found"});
     }
 
 
@@ -392,12 +390,13 @@ router.post('/:spotId/reviews', validateReview, requireAuth, async (req, res) =>
         ...req.body
     });
 
-    res.json(newReview)
+    res.status(201).json(newReview);
 })
 
 //Get bookings by the spotId
 router.get('/:spotId/bookings', requireAuth, async(req, res) => {
     const spot = await Spot.findByPk(req.params.spotId);
+   
     if(!spot){
         res.status(404);
         return res.json({message: "Spot couldn't be found"});
@@ -424,7 +423,7 @@ router.get('/:spotId/bookings', requireAuth, async(req, res) => {
 });
 
 //Post a new booking
-router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
+router.post('/:spotId/bookings', requireAuth, async (req, res) => {
     const spot = await Spot.findByPk(req.params.spotId);
     if(!spot){
         res.status(404);
@@ -474,6 +473,9 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
         const bookingJSON = booking.toJSON();
         const startDate = new Date(bookingJSON.startDate).getTime();
         const endDate = new Date(bookingJSON.endDate).getTime();
+        if(bookingStart === endDate){
+            errors.startDate = "Start date cannot be on an existing end date."
+        }
         if(startDate <= bookingStart && bookingStart < endDate){
             errors.startDate = "Start date conflicts with an existing booking";
         };
@@ -502,13 +504,5 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
 
     res.json(newBooking);
 });
-
-router.use((err, req, res, next) => {
-    res.status(err.status || 500)
-    res.send({
-        message: "Bad Request"
-    });
-})
-
 
 module.exports = router;

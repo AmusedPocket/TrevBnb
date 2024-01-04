@@ -71,7 +71,7 @@ router.put('/:bookingId', requireAuth, async(req, res) => {
     
     //if booking doesn't belong to the request user, error
     if(booking.userId !== req.user.id){
-        return res.status(403).json("Booking must belong to the current user to edit")
+        return res.status(403).json({message: "Booking must belong to the current user to edit"})
     };
 
     const bookings = await Booking.findAll({
@@ -101,7 +101,7 @@ router.put('/:bookingId', requireAuth, async(req, res) => {
     }
     
     if(bookingEnd < now){
-        return res.status(403).json("Past bookings can't be modified")
+        return res.status(403).json({message: "Past bookings can't be modified"});
     }
 
 
@@ -147,9 +147,11 @@ router.put('/:bookingId', requireAuth, async(req, res) => {
 //delete an existing booking
 router.delete('/:bookingId', requireAuth, async(req, res) => {
     const booking = await Booking.findByPk(req.params.bookingId);
+
     if(!booking){
         return res.status(404).json({message: "Booking couldn't be found"})
     };
+    
     const spot = await Spot.findByPk(booking.spotId);
     
     if(booking.userId !== req.user.id && spot.ownerId !== req.user.id){

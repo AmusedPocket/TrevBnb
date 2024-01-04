@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-
+const { check } = require('express-validator');
 
 const { setTokenCookie, restoreUser, requireAuth } = require('../../utils/auth');
 const { Spot, SpotImage, Review, sequelize, Sequelize, User, ReviewImage } = require('../../db/models');
 const { Op, ValidationError } = require('sequelize');
+const { handleValidationErrors } = require('../../utils/validation');
 
 //get all reviews by a user
 router.get('/current', requireAuth, async (req, res) => {
@@ -60,22 +61,20 @@ router.get('/current', requireAuth, async (req, res) => {
 
 //add an image to a review based on the review's id
 router.post('/:reviewId/images', requireAuth, async (req, res) => {
-    const review = await Review.findByPk(req.params.reviewId);
-    console.log(review)
-   
+    const review = await Review.findByPk(req.params.reviewId); 
 
     if(!review){
         return res.status(404).json({message: "Review couldn't be found"})
     };
     if(review.userId !== req.user.id){
-        return res.status(400).json({message: "Review must belong to the owner"})
+        return res.status(403).json({message: "Review must belong to the owner"})
     };
     const imageCount = await ReviewImage.findAll({
         where: {
             reviewId: Number(req.params.reviewId)
         }
     });
-    if(imageCount.length > 10){
+    if(imageCount.length >= 10){
         return res.status(403).json({message: "Maximum number of images for this resource was reached"})
     }
 
@@ -88,8 +87,18 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
     res.json({id: newImage.id, url: newImage.url});
 })
 
+const validateReview = [
+    check('review')
+        .notEmpty()
+        .withMessage("Review text is required"),
+    check('stars')
+        .isInt({min: 1, max: 5})
+        .withMessage("Stars must be an integer from 1 to 5"),
+    handleValidationErrors
+]
+
 //edit a review based on the review's id
-router.put('/:reviewId', requireAuth, async (req, res) => {
+router.put('/:reviewId', validateReview, requireAuth, async (req, res) => {
     const reviewLocator = await Review.findByPk(req.params.reviewId);
     if(!reviewLocator){
         return res.status(404).json({message: "Review couldn't be found"})
@@ -98,13 +107,6 @@ router.put('/:reviewId', requireAuth, async (req, res) => {
         return res.status(403).json({message: "Review must belong to the current user"})
     };
     
-    const {review, stars} = req.body;
-    if(!review){
-        return res.status(400).json({review: "Review text is required"})
-    };
-    if(!Number.isInteger(stars) || stars < 1 || stars > 5){
-        return res.status(400).json({message: "Stars must be an integer from 1 to 5"})
-    };
     await reviewLocator.update({...req.body});
 
     res.json(reviewLocator)
