@@ -50,30 +50,34 @@ router.get('/current', requireAuth, async (req, res) => {
 
 //Edit existing booking
 router.put('/:bookingId', requireAuth, async(req, res) => {
+   
     //find the booking to edit
     const booking = await Booking.findByPk(req.params.bookingId);
-
+    const oldStart = new Date(booking.startDate).getTime();
+    const oldEnd = new Date(booking.endDate).getTime();
+  
+    
     //if booking can't be found, error
     if(!booking){
-        return res.status(404).json({message: "Booking couldn't be found"})
+    return res.status(404).json({message: "Booking couldn't be found"})
+    };
+ 
+     //if booking doesn't belong to the request user, error
+     if(booking.userId !== req.user.id){
+        return res.status(403).json({message: "Booking must belong to the current user to edit"})
     };
 
-    //finds the booking's end date
-    const bookingEndDate = new Date(booking.endDate).getTime();
+     //finds the incoming booking's end date
+    const newEnd = new Date(req.body.endDate).getTime();
+    const newStart = new Date(req.body.startDate).getTime();
     //generates current time 
     const now = new Date().getTime();
 
     //if past booking end date is occured prior to now (less than now), error
-    if(bookingEndDate < now){
+    if(oldEnd <= now){
         return res.status(403).json({message: "Past bookings can't be modified"})
     };
-
-    
-    //if booking doesn't belong to the request user, error
-    if(booking.userId !== req.user.id){
-        return res.status(403).json({message: "Booking must belong to the current user to edit"})
-    };
-
+ 
     const bookings = await Booking.findAll({
         where: {
             spotId: booking.spotId,
@@ -85,46 +89,22 @@ router.put('/:bookingId', requireAuth, async(req, res) => {
     });
     
     const errors = {};
-    //updated start & end dates from the request body
-    const bookingStart = new Date(req.body.startDate).getTime();
-    const bookingEnd = new Date(req.body.endDate).getTime();
-    
-    
-    if(bookingStart < now && bookingEnd <= bookingStart){
-        res.status(400);
-        const resObj = {};
-        resObj.message = "Bad Request";
-        errors.startDate = "startDate cannot be in the past";
-        errors.endDate = "endDate cannot be on or before startDate";
-        resObj.errors = errors;
-        return res.json(resObj);
-    }
-    
-    if(bookingEnd < now){
-        return res.status(403).json({message: "Past bookings can't be modified"});
-    }
-
-
-    if(bookingEnd <= bookingStart){
-        res.status(400);
-        const resObj = {};
-        resObj.message = "Bad Request";
-        errors.endDate = "endDate cannot be on or before startDate";
-        resObj.errors = errors;
-        return res.json(resObj);
-    }
+   
 
     bookings.forEach(booking => {
         const bookingJSON = booking.toJSON();
-        const startDate = new Date(bookingJSON.startDate).getTime();
-        const endDate = new Date(bookingJSON.endDate).getTime();
-        if(startDate <= bookingStart && bookingStart < endDate){
+        const existingStartDate = new Date(bookingJSON.startDate).getTime();
+        const existingEndDate = new Date(bookingJSON.endDate).getTime();
+        if(existingEndDate === newStart){
+            errors.startDate = "Start date conflicts with an existing booking"
+        }
+        if(existingStartDate <= newStart && newStart < existingEndDate){
             errors.startDate = "Start date conflicts with an existing booking";
         };
-        if(startDate <= bookingEnd && bookingEnd <= endDate){
+        if(existingStartDate <= newEnd && newEnd <= existingEndDate){
             errors.endDate = "End date conflicts with an existing booking";
         };
-        if(bookingStart <= startDate && bookingEnd <= endDate){
+        if(newStart <= existingStartDate && newEnd >= existingEndDate){
             errors.startDate = "Start date conflicts with an existing booking";
             errors.endDate = "End date conflicts with an existing booking";
         }

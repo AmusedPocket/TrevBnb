@@ -167,21 +167,23 @@ router.post('/:spotId/images', requireAuth, async (req, res, next) => {
         return res.json(resObj);
     };
 
-    let newImg = await SpotImage.create({
-        spotId: req.params.spotId,
-        ...req.body
-    });
-    //finding the spot's owner
     let ownerIdObj = await Spot.findByPk(req.params.spotId, {
         attributes: ["ownerId"]
     })
 
     let ownerIdNumber = ownerIdObj.toJSON().ownerId;
+    console.log(ownerIdNumber)
+    console.log(req.user.id)
 
     if(ownerIdNumber !== req.user.id){
         res.status(400);
         return res.json({message: "Must be the owner of the spot to post image"})
     }
+
+    let newImg = await SpotImage.create({
+        spotId: req.params.spotId,
+        ...req.body
+    });   
 
     const result = newImg.toJSON()
 
@@ -227,7 +229,7 @@ const validateSpot = [
 ];
 
 //Create a new spot
-router.post('/', validateSpot, requireAuth, async (req, res) => {
+router.post('/', requireAuth, validateSpot,  async (req, res) => {
    
  
     
@@ -251,7 +253,8 @@ router.get('/:id', async (req, res, next) => {
             },
             {
                 model: User,
-                attributes: ['id', 'firstName', 'lastName']
+                attributes: ['id', 'firstName', 'lastName'],
+                as: "Owner"
             }
         ]
     });
@@ -281,7 +284,7 @@ router.get('/:id', async (req, res, next) => {
 });
 
 //Edit a spot
-router.put('/:spotId', validateSpot, requireAuth,  async (req, res) => {
+router.put('/:spotId', requireAuth, validateSpot,  async (req, res) => {
     let spot = await Spot.findByPk(req.params.spotId);
     if(!spot){
         res.status(404);
@@ -365,7 +368,7 @@ const validateReview = [
 ]
 
 //Create a review for a spot based on the spot id's
-router.post('/:spotId/reviews', validateReview, requireAuth, async (req, res) => {
+router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res) => {
     const spotId = req.params.spotId;
     const spot = await Spot.findByPk(spotId);
     if(!spot){

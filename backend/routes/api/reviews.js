@@ -98,7 +98,7 @@ const validateReview = [
 ]
 
 //edit a review based on the review's id
-router.put('/:reviewId', validateReview, requireAuth, async (req, res) => {
+router.put('/:reviewId', requireAuth, validateReview, async (req, res) => {
     const reviewLocator = await Review.findByPk(req.params.reviewId);
     if(!reviewLocator){
         return res.status(404).json({message: "Review couldn't be found"})
