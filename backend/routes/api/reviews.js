@@ -30,6 +30,10 @@ router.get('/current', requireAuth, async (req, res) => {
             attributes: ['id', 'url']
         }]
     });
+    console.log("reviews is: ", reviews)
+    if(reviews.reviewImages === undefined){
+        reviews.reviewImages = "User has not submitted any review images";
+    }
     let reviewArr = [];
     for(let review of reviews){
         let reviewObject = review.toJSON();

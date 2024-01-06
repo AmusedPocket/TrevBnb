@@ -45,6 +45,114 @@ const validSpots = [
     description: "Heaven on earth",
     price: 5940234
   },
+  {
+    ownerId: 4,
+    address: "456 Eightball Drive",
+    city: "Pooltable",
+    state: "OH",
+    country: "USA",
+    lat: 39.30, 
+    lng: 104.23,
+    name: "Hole in the wall Pool",
+    description: "It's a pool table",
+    price: 40
+  },
+  {
+    ownerId: 5,
+    address: "235 Taco Court",
+    city: "Irvine",
+    state: "CA",
+    country: "USA",
+    lat: 50.43,
+    lng: 13.76,
+    name: "Not a Taco Bell",
+    description: "Joking its a taco bell",
+    price: 125
+  },
+  {
+    ownerId: 6,
+    address: "940 Bose Drive",
+    city: "Sleepbuds",
+    state: "IL",
+    country: "USA",
+    lat: 32.09,
+    lng: -4.39,
+    name: "Sleep Buds",
+    description: "Not working but had to send them back",
+    price: 97
+  },
+  {
+    ownerId: 1,
+    address: "457 Xbox Drive",
+    city: "Belevue",
+    state: "WA",
+    country: "USA",
+    lat: 45.78, 
+    lng: -57.90,
+    name: "Microsoft HQ",
+    description: "Making Green Boxes",
+    price: 234567
+  },
+  {
+    ownerId: 2,
+    address: "178 Narobia Street",
+    city: "Savannah",
+    state: "GA",
+    country: "USA",
+    lat: 57.90,
+    lng: 45.63,
+    name: "Narobia Dining",
+    description: "Best breakfast you've ever had",
+    price: 67
+  },
+  {
+    ownerId: 3,
+    address: "157 Google Pixel Drive",
+    city: "San Mateo",
+    state: "CA",
+    country: "USA",
+    lat: 35.20,
+    lng: 34.509,
+    name: "Google pixel phones",
+    description: "It's a phone!",
+    price: 5940234
+  },
+  {
+    ownerId: 4,
+    address: "983 Cucapa Drive",
+    city: "Flagstaff",
+    state: "AZ",
+    country: "USA",
+    lat: 45.32, 
+    lng: -19.23,
+    name: "Beer Cap",
+    description: "Beer on the map",
+    price: 115
+  },
+  {
+    ownerId: 5,
+    address: "157 Dust Bowl Street",
+    city: "Turlock",
+    state: "CA",
+    country: "USA",
+    lat: 45.23,
+    lng: 9.18,
+    name: "Dust Bowl Brewery",
+    description: "Serving great beer",
+    price: 95
+  },
+  {
+    ownerId: 6,
+    address: "157 Cigar City",
+    city: "Miami",
+    state: "FL",
+    country: "USA",
+    lat: 9.45,
+    lng: -42.39,
+    name: "Cigar City Brewery",
+    description: "Hip Hip, Huray!",
+    price: 170
+  },
 ]; 
 
 /** @type {import('sequelize-cli').Migration} */

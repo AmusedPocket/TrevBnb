@@ -12,11 +12,11 @@ const validateSignup = [
     check('email')
         .exists({ checkFalsy: true})
         .isEmail()
-        .withMessage('Please provide a valid email.'),
+        .withMessage('Invalid email'),
     check('username')
         .exists({ checkFalsy: true })
         .isLength({ min: 4})
-        .withMessage('Please provide a username with atleast 4 characters.'),
+        .withMessage('Username is required'),
     check('username')
         .not()
         .isEmail()
@@ -75,7 +75,7 @@ router.post(
         const resObj = {
           message: "User already exists",
           errors: {
-            username: "User with that email already exists"
+            email: "User with that email already exists"
           } }
        return res.json(resObj);
       };

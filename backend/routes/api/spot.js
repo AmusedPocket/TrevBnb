@@ -35,7 +35,11 @@ router.get('/current', requireAuth, async (req, res) => {
             ],
         });
         let review = rating.toJSON();
-        listOfSpots[i].Average_Rating = review.avgStarRating;
+        if(review.avgStarRating === null){
+            listOfSpots[i].avgRating = "No reviews found for this spot";
+        } else {
+            listOfSpots[i].avgRating = review.avgStarRating.toFixed(1);
+        }
     }
     //add preview image
     for(let i = 0; i < listOfSpots.length; i++){
@@ -129,7 +133,11 @@ router.get('/', validateGet, async (req, res, next) => {
             ],
         });
         let review = rating.toJSON();
-        spotsList[i].avgRating = review.avgStarRating;
+        if(review.avgStarRating === null){
+            spotsList[i].avgRating = "No reviews found for this spot";
+        } else {
+            spotsList[i].avgRating = review.avgStarRating.toFixed(1);
+        }
     }
     //add preview image
     for(let i = 0; i < spotsList.length; i++){
