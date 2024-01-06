@@ -37,7 +37,7 @@ router.get('/current', requireAuth, async (req, res) => {
         let review = rating.toJSON();
         listOfSpots[i].avgRating = review.avgStarRating;
         if(review.avgStarRating){
-            listOfSpots[i].avgRating = review.avgStarRating.toFixed(1);
+            listOfSpots[i].avgRating = review.avgStarRating;
         } else {
             listOfSpots[i].avgRating = "No reviews found for this spot";
         }
@@ -136,7 +136,7 @@ router.get('/', validateGet, async (req, res, next) => {
         let review = rating.toJSON();
         // spotsList[i].avgRating = review.avgStarRating;
         if(review.avgStarRating){
-            spotsList[i].avgRating = review.avgStarRating.toFixed(1);
+            spotsList[i].avgRating = review.avgStarRating;
         } else {
             spotsList[i].avgRating = "No reviews found for this spot";
         }
@@ -286,7 +286,7 @@ router.get('/:id', async (req, res, next) => {
     let review = rating.toJSON();
     let newSpot = spot.toJSON();
     if(review.avgStarRating){
-        newSpot.avgStarRating = review.avgStarRating.toFixed(1);
+        newSpot.avgStarRating = review.avgStarRating;
     } else {
         newSpot.avgStarRating = "No reviews found for this spot"
     }
