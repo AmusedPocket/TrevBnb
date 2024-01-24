@@ -1,5 +1,6 @@
 import React from 'react';
 import IndexItem from './IndexItem';
+import './style.css';
 
 const SpotsIndex = ({ spots }) => {
     return (<div className='spot-tile-container'>

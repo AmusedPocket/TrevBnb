@@ -5,6 +5,7 @@ import { csrfFetch } from "./csrf";
 const POPULATE = "spots/POPULATE";
 const SINGLESPOT = "spots/SINGLESPOT"
 
+
 //Action Creators
 
 // Populate with spots
@@ -25,7 +26,7 @@ const setSpotById = (spot) => {
 export const populateSpots = () => async (dispatch) => {
     const response = await csrfFetch(`/api/spots`);
 
-    if(response.ok){
+    if (response.ok) {
         const allSpots = await response.json();
         dispatch(populate(allSpots.Spots))
     }
@@ -34,12 +35,36 @@ export const populateSpots = () => async (dispatch) => {
 }
 //Get a spot by ID
 export const getSpotById = (spotId) => async (dispatch) => {
-    const url = `/api/spots/${spotId}`;
-    const response = await csrfFetch(url);
-    if(response.ok){
+    const response = await csrfFetch(`/api/spots/${spotId}`);
+    if (response.ok) {
         const data = await response.json();
         dispatch(setSpotById(data))
     }
+    return response;
+}
+//Create a new spot
+export const createANewSpot = (spot) => async (dispatch) => {
+    const response = await csrfFetch('/api/spots', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "XSRF-Token": "XSRF-Token"
+        },
+        body: JSON.stringify(spot)
+    })
+    return response;
+}
+
+//Add an image to a spot
+export const addImageToASpot = (spotId, imageURL) => async (dispatch) => {
+    const response = await csrfFetch(`/api/spots/${spotId}/images`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "XSRF-Token": "XSRF-Token"
+        },
+        body: JSON.stringify(imageURL)
+    })
     return response;
 }
 
@@ -49,24 +74,24 @@ const initialState = {
     singleSpot: {},
 }
 
-export default function spotReducer(state = initialState, action){
-    switch(action.type){
-        case POPULATE:{
-            const newState = {...state};
+export default function spotReducer(state = initialState, action) {
+    switch (action.type) {
+        case POPULATE: {
+            const newState = { ...state };
             const allSpots = {};
             action.payload.forEach(spot => {
-                allSpots[spot.id] = {...spot}
+                allSpots[spot.id] = { ...spot }
             })
             newState.allSpots = allSpots;
             return newState;
         }
-        case SINGLESPOT:{
-            const newState = {...state};
-            const singleSpot = {...action.payload};
+        case SINGLESPOT: {
+            const newState = { ...state };
+            const singleSpot = { ...action.payload };
             newState.singleSpot = singleSpot;
             return newState;
         }
-        default:{
+        default: {
             return state
         }
     }

@@ -30,7 +30,9 @@ const SpotPage = () => {
        
     }, [dispatch]);
 
-   
+   const reserveButtonPress = (e) => {
+    alert("Feature coming soon...")
+   }
 
     return (isLoaded && <div className='spot-page'>
         
@@ -44,7 +46,7 @@ const SpotPage = () => {
         </div>
         <div className='spot-show-info'>
             <div className='spot-show-description'>
-                <h3>Hosted by {Owner.firstName} </h3>
+                <h3>Hosted by {Owner.firstName} {Owner.lastName} </h3>
                 <p>{description}</p>
             </div>
         </div>
@@ -52,10 +54,13 @@ const SpotPage = () => {
             <div className='spot-show-card-first-line'>
                 <p><span className='spot-show-price'>${price}</span> per night</p>
                 <div className='review-card'>
-                    <ReviewStats avgStarRating={avgStarRating} 
-                    numReviews={numReviews} />
+                    <ReviewStats 
+                        avgStarRating={avgStarRating} 
+                        numReviews={numReviews} 
+                    />
                 </div>
             </div>
+            <button onClick={reserveButtonPress}>Reserve</button>
         </div>
         </div>
     )
