@@ -1,21 +1,24 @@
 import React, {useState, useEffect} from "react";
-import { useParams } from "react-router-dom";
-import { getSpotById } from "../../store/spots";
+import { useNavigate, useParams } from "react-router-dom";
+import {  getSpotById } from "../../store/spots";
 import { useDispatch, useSelector } from "react-redux";
-import SpotPage from "../SpotPage";
+import CreateASpotForm from "../SpotForm";
+
 
 const EditSpot = () => {
     const dispatch = useDispatch();
     const { spotId } = useParams();
     const [isLoaded, setIsLoaded] = useState(false);
+    const spot = useSelector(state => state.spots.singleSpot);
 
     useEffect(()=>{
         dispatch(getSpotById(spotId)).then(()=>setIsLoaded(true))
     }, [dispatch]);
 
     return (
-        <div className="spot-form-page">
-            {isLoaded && <SpotPage spot={spot} formType="update"/>}
+        <div className="new-spot-page">
+            <h1>Update your Spot</h1>
+            {isLoaded && <CreateASpotForm spot={spot} formType="Update Spot"/>}
         </div>
     )
 }

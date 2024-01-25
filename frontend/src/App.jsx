@@ -8,7 +8,9 @@ import * as sessionActions from './store/session';
 import SpotPage from './components/SpotPage';
 import EditSpot from './components/EditSpot';
 import LandingPage from './components/LandingPage';
+import ManageSpots from './components/ManageSpots';
 import CreateASpotForm from './components/CreateSpotForm';
+
 
 function App() {
   const dispatch = useDispatch();
@@ -29,6 +31,7 @@ function App() {
           <Route path='/spots/:spotId' element={<SpotPage />}/>
           <Route path='/spots/:spotId/edit' element={<EditSpot />}/>
           <Route path='/spots/new' element={<CreateASpotForm/>}/>
+          <Route path='/spots/current' element={<ManageSpots/>}/>
       </Routes>
       </BrowserRouter>
     </>)

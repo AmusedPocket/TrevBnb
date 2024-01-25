@@ -1,0 +1,21 @@
+.delete-modal {
+    background-color: aqua;
+    text-align: center;
+    justify-content: space-between;
+    margin: 10px;
+}
+
+.delete-button {
+    justify-content: space-around;
+    display: inline-flexbox;
+    padding: 10px;
+    margin: 10px;
+}
+
+.yes-delete {
+    background-color: red;
+}
+
+.no-delete {
+    background-color: darkgray;
+}

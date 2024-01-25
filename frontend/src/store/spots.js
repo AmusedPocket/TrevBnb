@@ -4,21 +4,31 @@ import { csrfFetch } from "./csrf";
 
 const POPULATE = "spots/POPULATE";
 const SINGLESPOT = "spots/SINGLESPOT"
-
+const USERSPOTS = "spots/USERSPOTS"
 
 //Action Creators
 
 // Populate with spots
-const populate = spots => ({
-    type: POPULATE,
-    payload: spots
-});
+const populate = (spots) => {
+    return {
+        type: POPULATE,
+        payload: spots
+    }
+};
 
 //Set spot by id
 const setSpotById = (spot) => {
     return {
         type: SINGLESPOT,
         payload: spot
+    }
+}
+
+//All spots by user
+const allSpotsByUser = (spots) => {
+    return {
+        type: USERSPOTS,
+        payload: spots
     }
 }
 
@@ -68,6 +78,37 @@ export const addImageToASpot = (spotId, imageURL) => async (dispatch) => {
     return response;
 }
 
+//Get spots by current user
+export const getCurrentUserSpots = () => async (dispatch) => {
+    const response = await csrfFetch('/api/spots/current');
+    if(response.ok){
+        const data = await response.json();
+        dispatch(allSpotsByUser(data));
+    }
+    return response;
+}
+
+//Edit a spot
+export const editASpot = (spotId, spot) => async (dispatch) => {
+    const response = await csrfFetch(`/api/spots/${spotId}`, {
+        method: 'PUT',
+        headers: {
+            "Content-Type": "application/json",
+            "XSRF-Token": "XSRF-Token",
+        },
+        body: JSON.stringify(spot)
+    });
+
+    return response;
+}
+
+export const deleteSpotById = (spotId) => async (dispatch) => {
+    const response = await csrfFetch(`/api/spots/${spotId}`, {
+        method: "DELETE"
+    });
+    return response;
+}
+
 //Reducer
 const initialState = {
     allSpots: {},
@@ -90,6 +131,16 @@ export default function spotReducer(state = initialState, action) {
             const singleSpot = { ...action.payload };
             newState.singleSpot = singleSpot;
             return newState;
+        }
+        case USERSPOTS: {
+            const userOwnedSpots = {...action.payload.Spots};
+            const allSpots = Object.values(userOwnedSpots);
+            const userOwnedSpotsObj = {};
+            allSpots.forEach((spot) => (userOwnedSpotsObj[spot.id] = spot))
+            return {
+                ...state,
+                allSpots: userOwnedSpotsObj
+            }
         }
         default: {
             return state

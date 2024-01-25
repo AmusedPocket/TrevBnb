@@ -10,13 +10,16 @@ const IndexItem = ({spot}) => {
     }
 
     return(<>
-        <div onClick={clickOnSpot} className="spot-tile">
-            <img className='spot-tile-image' src={`${spot.previewImage}`} alt={`${spot.previewImage}`}/>
-            <span className='spot-tile-name'>{spot.name}</span>
+        <div onClick={clickOnSpot} className="spot-tile cursor">
+            <div className='tooltip'>
+                <img className='spot-tile-image tooltip' src={`${spot.previewImage}`} alt={`${spot.previewImage}`}/>
+                <span className='tooltip-text'>{spot.name}</span>
+            </div>
+          
             <div className='spot-tile-info'>
                 <div className='spot-tile-info-first-line'>
                     <p>{spot.city}, {spot.state}</p>
-                    <p><span><i className="fa-solid fa-star"></i></span>{spot.avgRating ? spot.avgRating.toFixed(1) : "New"}</p>
+                    <span className="spot-tile-stars"><i className="fa-solid fa-star"/>{spot.avgRating ? spot.avgRating.toFixed(1) : "New"}</span>
                 </div>
                 <p><span className='spot-tile-price'>${spot.price}</span> per night</p>
             </div>

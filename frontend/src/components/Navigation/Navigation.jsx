@@ -6,7 +6,7 @@ import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
 import './Navigation.css';
 import navicon from './navicon.png'
-import CreateASpotForm from '../CreateSpotForm';
+
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector(state => state.session.user);
