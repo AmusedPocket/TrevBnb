@@ -19,7 +19,7 @@ const IndexItem = ({spot}) => {
             <div className='spot-tile-info'>
                 <div className='spot-tile-info-first-line'>
                     <p>{spot.city}, {spot.state}</p>
-                    <span className="spot-tile-stars"><i className="fa-solid fa-star"/>{spot.avgRating ? spot.avgRating.toFixed(1) : "New"}</span>
+                    <span className="spot-tile-stars"><i className="fa-solid fa-star"/>{spot.avgRating ? Number(spot.avgRating).toFixed(1) : "New"}</span>
                 </div>
                 <p><span className='spot-tile-price'>${spot.price}</span> per night</p>
             </div>

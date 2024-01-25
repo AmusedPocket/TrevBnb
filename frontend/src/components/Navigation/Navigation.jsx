@@ -5,22 +5,14 @@ import OpenModalButton from '../OpenModalButton';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
 import './Navigation.css';
-<<<<<<< HEAD
-=======
 import navicon from './navicon.png'
 
->>>>>>> dev
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector(state => state.session.user);
 
   const sessionLinks = sessionUser ?
     (
-<<<<<<< HEAD
-      <li>
-        <ProfileButton user={sessionUser} />
-      </li>
-=======
       <>
         <li>
           <ProfileButton user={sessionUser} />
@@ -30,7 +22,6 @@ function Navigation({ isLoaded }) {
         </li>
       </>
 
->>>>>>> dev
     ) : (
       <>
         <li>
@@ -52,12 +43,6 @@ function Navigation({ isLoaded }) {
 
   return (
     <ul>
-<<<<<<< HEAD
-      <li>
-        <NavLink to="/">Home</NavLink>
-      </li>
-      {isLoaded && sessionLinks}
-=======
       <div className="nav-bar">
         <NavLink className="home-icon-assembly" to="/"><img className="home-icon" src={navicon} />TrevBnb</NavLink>
         <li className="nav-bar-right-side">
@@ -65,7 +50,6 @@ function Navigation({ isLoaded }) {
         </li>
 
       </div>
->>>>>>> dev
     </ul>
   );
 }

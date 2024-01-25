@@ -8,7 +8,7 @@ const ReviewStats = ({avgStarRating, numReviews}) => {
         </>)
     } else {
         return (<>
-        <p><span><i className="fa-solid fa-star"></i></span>{avgStarRating.toFixed(1)}</p>
+        <p><span><i className="fa-solid fa-star"></i></span>{Number(avgStarRating).toFixed(1)}</p>
         <p>·</p>
         <p>{numReviews} {reviewWord}</p>
         </>)
