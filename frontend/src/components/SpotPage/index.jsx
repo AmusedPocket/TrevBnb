@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSpotById } from '../../store/spots';
@@ -12,15 +12,11 @@ const SpotPage = () => {
     const [isLoaded, setIsLoaded] = useState(false);
     const spot = useSelector(state => state.spots.singleSpot);
     const {
-        address,
         avgStarRating,
         city,
         country,
         description,
         Owner,
-        id,
-        lat,
-        lng,
         name,
         numReviews,
         ownerId,
@@ -30,9 +26,9 @@ const SpotPage = () => {
     useEffect(() => {
         dispatch(getSpotById(spotId)).then(() => setIsLoaded(true));
 
-    }, [dispatch]);
+    }, [dispatch, spotId]);
 
-    const reserveButtonPress = (e) => {
+    const reserveButtonPress = () => {
         alert("Feature coming soon...")
     }
 

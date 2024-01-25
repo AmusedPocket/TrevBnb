@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState} from 'react';
 import { useDispatch } from 'react-redux';
 import { createANewSpot, editASpot } from '../../store/spots';
 import { useNavigate } from 'react-router-dom';

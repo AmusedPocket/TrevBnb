@@ -1,5 +1,3 @@
-import React from 'react';
-
 const ReviewStats = ({avgStarRating, numReviews}) => {
     const reviewWord = numReviews === 1 ? "Review" : "Reviews"
     if(numReviews === 0 || numReviews === "0"){

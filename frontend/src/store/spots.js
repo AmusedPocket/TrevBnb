@@ -53,7 +53,7 @@ export const getSpotById = (spotId) => async (dispatch) => {
     return response;
 }
 //Create a new spot
-export const createANewSpot = (spot) => async (dispatch) => {
+export const createANewSpot = (spot) => async () => {
     const response = await csrfFetch('/api/spots', {
         method: "POST",
         headers: {
@@ -66,7 +66,7 @@ export const createANewSpot = (spot) => async (dispatch) => {
 }
 
 //Add an image to a spot
-export const addImageToASpot = (spotId, imageURL) => async (dispatch) => {
+export const addImageToASpot = (spotId, imageURL) => async () => {
     const response = await csrfFetch(`/api/spots/${spotId}/images`, {
         method: "POST",
         headers: {
@@ -89,7 +89,7 @@ export const getCurrentUserSpots = () => async (dispatch) => {
 }
 
 //Edit a spot
-export const editASpot = (spotId, spot) => async (dispatch) => {
+export const editASpot = (spotId, spot) => async () => {
     const response = await csrfFetch(`/api/spots/${spotId}`, {
         method: 'PUT',
         headers: {
@@ -102,7 +102,7 @@ export const editASpot = (spotId, spot) => async (dispatch) => {
     return response;
 }
 
-export const deleteSpotById = (spotId) => async (dispatch) => {
+export const deleteSpotById = (spotId) => async () => {
     const response = await csrfFetch(`/api/spots/${spotId}`, {
         method: "DELETE"
     });

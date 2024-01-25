@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {useState, useEffect} from "react";
+import { useParams } from "react-router-dom";
 import {  getSpotById } from "../../store/spots";
 import { useDispatch, useSelector } from "react-redux";
 import CreateASpotForm from "../SpotForm";
@@ -13,7 +13,7 @@ const EditSpot = () => {
 
     useEffect(()=>{
         dispatch(getSpotById(spotId)).then(()=>setIsLoaded(true))
-    }, [dispatch]);
+    }, [dispatch, spotId]);
 
     return (
         <div className="new-spot-page">

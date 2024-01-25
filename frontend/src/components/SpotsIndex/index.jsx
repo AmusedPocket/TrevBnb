@@ -1,4 +1,3 @@
-import React from 'react';
 import IndexItem from './IndexItem';
 import './style.css';
 

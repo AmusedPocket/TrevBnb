@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import {useState, useEffect} from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { getSpotById } from "../../store/spots";
@@ -6,7 +6,7 @@ import { createReview, editReview, getAllReviewsOfUser, populateReviewsInAGivenS
 import StarInput from "./StarInput";
 
 
-const ReviewForm = ({review, spotId, spotName, formType, updateType}) => {
+const ReviewForm = ({review, spotId, formType, updateType}) => {
    
     const dispatch = useDispatch();
     const {closeModal} = useModal();

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { populateReviewsInAGivenSpot } from '../../store/review';
 import OpenModalButton from '../OpenModalButton';
@@ -6,7 +6,7 @@ import CreateReviewForm from '../CreateReviewForm';
 import Review from './Review';
 
 
-const ReviewsIndex = ({spot, spotName, spotId, userName, ownerId: spotOwnerId, numReviews}) => {
+const ReviewsIndex = ({spot, spotId, ownerId: spotOwnerId, numReviews}) => {
     const dispatch = useDispatch();
     const [loaded, setLoaded] = useState(false);
     const reviews = useSelector(state => state.reviews.spot);
@@ -15,7 +15,7 @@ const ReviewsIndex = ({spot, spotName, spotId, userName, ownerId: spotOwnerId, n
 
     useEffect(()=> {
         dispatch(populateReviewsInAGivenSpot(spotId)).then(()=>setLoaded(true));
-    }, [dispatch]);
+    }, [dispatch, spotId]);
 
     useEffect(()=> {
         if(user === null){
@@ -36,7 +36,7 @@ const ReviewsIndex = ({spot, spotName, spotId, userName, ownerId: spotOwnerId, n
         }
 
         setPostReview(true);
-    }, [spotOwnerId, user, reviews]);
+    }, [spotOwnerId, user, reviews, spotId]);
 
 
     return(loaded && <>

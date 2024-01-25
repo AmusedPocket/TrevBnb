@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { useModal } from "../../context/Modal";
 import { getSpotById } from "../../store/spots";
 import { deleteReview, populateReviewsInAGivenSpot} from "../../store/review";

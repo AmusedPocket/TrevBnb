@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import {useState} from "react";
 
 const StarInput = ({stars, setStars}) => {
     const [starEffect, setStarEffect] = useState(stars);

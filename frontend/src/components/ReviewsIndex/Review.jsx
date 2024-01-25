@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import OpenModalButton from "../OpenModalButton";
 import EditReviewForm from "../ReviewForm/EditReviewForm";
@@ -6,7 +6,7 @@ import DeleteReviewForm from "../ReviewForm/DeleteReviewForm";
 
 
 
-const Review = ({ review, spotId, spotName, stars }) => {
+const Review = ({ review, spotId, spotName}) => {
     const firstName = review.User.firstName;
     const year = review.createdAt.split("T")[0].split("-")[0]
     const monthMM = review.createdAt.split("T")[0].split("-")[1]
@@ -35,7 +35,7 @@ const Review = ({ review, spotId, spotName, stars }) => {
                 return;
             }
         }
-    }, [review, enableManage]);
+    }, [review, enableManage, user]);
 
     return (
         <>
