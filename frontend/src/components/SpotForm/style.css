@@ -1,0 +1,47 @@
+.new-spot-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+}
+
+.new-spot-section {
+    border-bottom: 2px solid black;
+    width: 50%;
+}
+
+.new-spot-form {
+    width: 40%;
+}
+
+.spot-form-error {
+    padding-left: 10px;
+    color: red;
+    font-style: italic;
+}
+
+.double-input-field {
+    display: inline-grid;
+    grid-template-columns: 3fr 2fr;
+    grid-template-rows: 1fr 1fr;
+    grid-column-gap: 10px;
+    align-content: space-evenly;
+    grid-auto-flow: column;
+    width: 100%;
+}
+
+.row-header {
+    display: flex;
+}
+
+.large-input-field {
+    border: 2px solid orange;
+    width: 100%;
+    height: 200px;
+    resize: none;
+}
+
+.single-input-field {
+    width: 100%;    
+}
+
