@@ -45,7 +45,7 @@ function Navigation({ isLoaded }) {
     <ul>
       <div className="nav-bar">
         <NavLink className="home-icon-assembly" to="/"><img className="home-icon" src={navicon} />TrevBnb</NavLink>
-        <li>
+        <li className="nav-bar-right-side">
           {isLoaded && sessionLinks}
         </li>
 

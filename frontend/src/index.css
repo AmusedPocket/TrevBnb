@@ -59,3 +59,9 @@
 .delete-no {
     background-color: darkgray;
 }
+
+.nav-bar-right-side {
+    display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+}
