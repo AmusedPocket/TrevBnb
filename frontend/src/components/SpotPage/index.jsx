@@ -68,7 +68,10 @@ const SpotPage = () => {
             avgStarRating={avgStarRating}
             numReviews={numReviews}
         />
-        <ReviewsIndex spot={spot} spotId={spotId} ownerId={ownerId} numReviews={numReviews} />
+        <div>
+            <ReviewsIndex spot={spot} spotId={spotId} ownerId={ownerId} numReviews={numReviews} />
+
+        </div>
     </div>
     )
 }

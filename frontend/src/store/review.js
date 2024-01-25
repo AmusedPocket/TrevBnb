@@ -1,6 +1,8 @@
 import { csrfFetch } from "./csrf";
 
 const POPULATE = "reviews/POPULATE";
+const GET_USER = "reviews/GETUSER"
+
 
 const populateReviews = (reviews) => {
     return {
@@ -9,11 +11,51 @@ const populateReviews = (reviews) => {
     }
 }
 
+const getUser = (reviews) => {
+    return {
+        type: GET_USER,
+        payload: reviews
+    }
+}
+
+export const createReview = (spotId, review) => async (dispatch) => {
+    const request = await fetch (`/api/spots/${spotId}/reviews`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "XSRF-Token": "XSRF-TOKEN"
+        },
+        body: JSON.stringify(review)
+    })
+    return request;
+}
+
 export const populateReviewsInAGivenSpot = (spotId) => async (dispatch) => {
     const response = await csrfFetch(`/api/spots/${spotId}/reviews`)
     if(response.ok){
         const data = await response.json();
         dispatch(populateReviews(data.Reviews))
+    }
+    return response;
+}
+
+export const editReview = (reviewId, review) => async (dispatch) => {
+    const response = await fetch (`/api/reviews/${reviewId}`, {
+        method: "PUT",
+        headers: {
+            "Content-type": "application/json",
+            "XSRF-Token": "XSRF-TOKEN"
+        },
+        body: JSON.stringify(review),
+    })
+    return response;
+}
+
+export const getAllReviewsOfUser = () => async (dispatch) => {
+    const response = await csrfFetch("/api/reviews/current")
+    if(response.ok){
+        const result = await response.json();
+        dispatch(getUser(result.Reviews))
     }
     return response;
 }
@@ -32,6 +74,15 @@ export default function reviewReducer(state = initialState, action){
                 spot[review.id] = review;
             })
             newState.spot = spot;
+            return newState;
+        }
+        case GET_USER: {
+            const newState = {...state};
+            const user = {};
+            action.payload.forEach(review => {
+                user[review.id] = review;
+            })
+            newState.user = user;
             return newState;
         }
         default:

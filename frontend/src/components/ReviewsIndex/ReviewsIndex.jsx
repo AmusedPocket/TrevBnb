@@ -2,8 +2,11 @@ import React, {useState, useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { populateReviewsInAGivenSpot } from '../../store/review';
 import OpenModalButton from '../OpenModalButton';
+import CreateReviewForm from '../CreateReviewForm';
+import Review from './Review';
 
-const ReviewsIndex = ({review, spotId, userName, ownerId: spotOwnerId, numReviews}) => {
+
+const ReviewsIndex = ({spot, spotName, spotId, userName, ownerId: spotOwnerId, numReviews}) => {
     const dispatch = useDispatch();
     const [loaded, setLoaded] = useState(false);
     const reviews = useSelector(state => state.reviews.spot);
@@ -35,11 +38,21 @@ const ReviewsIndex = ({review, spotId, userName, ownerId: spotOwnerId, numReview
         setPostReview(true);
     }, [spotOwnerId, user, reviews]);
 
-    return(
-        <>
-        <h1>Reviews are here</h1>
-        </>
-    )
+
+    return(loaded && <>
+        <div>
+            {postReview && <div className="post-review-section">
+                <OpenModalButton 
+                buttonText="Post Your Review"
+                modalComponent={<CreateReviewForm spotId={spotId} />} />
+                {numReviews === 0 && <p>Be the first to post a review!</p>}
+               </div>}
+            {Object.values(reviews).sort((a, b)=> b.id - a.id).map(review => {
+                return (<Review className="review-section review-card" review={review} spotId={spotId} key={review.id} spot={spot}/>)
+            })}
+        </div>
+    
+    </>);
 }
 
 export default ReviewsIndex;
