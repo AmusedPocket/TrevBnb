@@ -19,7 +19,7 @@ const getUser = (reviews) => {
 }
 
 export const createReview = (spotId, review) => async (dispatch) => {
-    const request = await fetch (`/api/spots/${spotId}/reviews`, {
+    const request = await csrfFetch (`/api/spots/${spotId}/reviews`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -40,10 +40,10 @@ export const populateReviewsInAGivenSpot = (spotId) => async (dispatch) => {
 }
 
 export const editReview = (reviewId, review) => async (dispatch) => {
-    const response = await fetch (`/api/reviews/${reviewId}`, {
+    const response = await csrfFetch (`/api/reviews/${reviewId}`, {
         method: "PUT",
         headers: {
-            "Content-type": "application/json",
+            "Content-Type": "application/json",
             "XSRF-Token": "XSRF-TOKEN"
         },
         body: JSON.stringify(review),
@@ -57,6 +57,17 @@ export const getAllReviewsOfUser = () => async (dispatch) => {
         const result = await response.json();
         dispatch(getUser(result.Reviews))
     }
+    return response;
+}
+
+export const deleteReview = (reviewId) => async (dispatch) => {
+    const response = await csrfFetch(`/api/reviews/${reviewId}`, {
+        method: "DELETE",
+        headers: {
+            "XSRF-Token": "XSRF-TOKEN",
+        }
+    })
+
     return response;
 }
 

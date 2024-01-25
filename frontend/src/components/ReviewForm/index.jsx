@@ -3,9 +3,11 @@ import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { getSpotById } from "../../store/spots";
 import { createReview, editReview, getAllReviewsOfUser, populateReviewsInAGivenSpot } from "../../store/review";
+import StarInput from "./StarInput";
 
 
 const ReviewForm = ({review, spotId, spotName, formType, updateType}) => {
+   
     const dispatch = useDispatch();
     const {closeModal} = useModal();
     const [reviewText, setReviewText] = useState(review.review);
@@ -18,22 +20,29 @@ const ReviewForm = ({review, spotId, spotName, formType, updateType}) => {
         e.preventDefault();
         const newReview = {
             review: reviewText,
-            stars
+            stars: stars
         }
+        
+      
         if(formType==='create'){
-            const response = await dispatch(createReview(spotId, review))
+            
+            const response = await dispatch(createReview(spotId, newReview))
             if(response.ok){
                 await dispatch(getSpotById(spotId));
                 await dispatch(populateReviewsInAGivenSpot(spotId))
                 closeModal();
             } else {
+               
                 const errorMessage = await response.json();
                 setError(errorMessage.message)
             }
         } else if (formType === "update"){
+
             const response = await dispatch(editReview(review.id, newReview));
+            
             if(response.ok){
                 if(updateType === "spot"){
+                    
                     await dispatch(getSpotById(spotId));
                     await dispatch(populateReviewsInAGivenSpot(spotId))
                 } else if (updateType === "user"){
@@ -41,6 +50,7 @@ const ReviewForm = ({review, spotId, spotName, formType, updateType}) => {
                 }
                 closeModal();
             } else {
+                console.log("inside error")
                 const data = await response.json();
                 setError(data.message);
             }
@@ -58,15 +68,16 @@ const ReviewForm = ({review, spotId, spotName, formType, updateType}) => {
 
     return (<div className="review-box">
         <h2 className="review-box-heading">How was your stay?</h2>
+        {error && <p className="review-error">{error}</p>}
         <form className="review-box-form" onSubmit={submitForm}>
             {error && <p className="review-box-error">{error}</p>}
-            <textArea 
+            <textarea 
             value={reviewText}
-            placeHolder="Leave your review here..."
+            placeholder="Leave your review here..."
             onChange={(e)=> setReviewText(e.target.value)}
             />
-        {/* <StarInput stars={stars} setStars={setStars}/> */}
-        <button onSubmit={submitForm}>Submit Your Review</button>
+        <StarInput stars={stars} setStars={setStars}/>
+        <button onSubmit={submitForm} disabled={disable}>{buttonText}</button>
         </form>
     </div>)
 }

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import OpenModalButton from "../OpenModalButton";
+import EditReviewForm from "../ReviewForm/EditReviewForm";
+import DeleteReviewForm from "../ReviewForm/DeleteReviewForm";
 
 
 
@@ -47,7 +49,9 @@ const Review = ({ review, spotId, spotName, stars }) => {
             <OpenModalButton
             buttonText="Update"
             modalComponent={<EditReviewForm review={review} spotId={spotId} spotName={spotName} updateType="spot" />}/>
-            
+            <OpenModalButton
+            buttonText="Delete"
+            modalComponent={<DeleteReviewForm review={review} spotId={spotId} updateType="spot" />}/>
             </div>}
         </>
     )
