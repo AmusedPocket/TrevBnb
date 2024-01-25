@@ -1,6 +1,4 @@
-<<<<<<< HEAD
-/* TODO: Add sitewide styles */
-=======
+
 .cursor {
     cursor: pointer;
 }
@@ -68,4 +66,4 @@
     flex-direction: row-reverse;
     flex-wrap: wrap;
 }
->>>>>>> dev
+
