@@ -48,6 +48,7 @@ function LoginFormModal() {
   return (
     <div className="log-in-modal">
       <h1>Log In</h1>
+      {errors && <p className="log-in-modal-error">{errorText || errors}</p>}
       <form onSubmit={handleSubmit}>
         <div className="log-in-modal-inputs">
           <input
@@ -71,7 +72,7 @@ function LoginFormModal() {
         </div>
 
         {/* {errors && <p className="log-in-modal-error">{errors}</p>} */}
-        {errors && <p className="log-in-modal-error">{errorText || errors}</p>}
+        
         <button type="submit" disabled={buttonDisable} className={buttonClass}>Log In</button>
         <button type="demoUser" className="log-in-modal-button cursor" onClick={demoUserLogIn}>Log In as Demo User</button>
       </form>

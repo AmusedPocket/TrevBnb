@@ -18,41 +18,50 @@ function SignupFormModal() {
 
   const buttonClass = !disableButton || password !== confirmPassword ? "sign-up-button-disabled" : "sign-up-button"
 
+
+
   useEffect(() => {
     if (!email || !username || !firstName || !lastName || !password || !confirmPassword || username.length < 4 || password.length < 6) setDisableButton(false);
 
     else setDisableButton(true)
-  }, [email, username, firstName, lastName])
+  }, [email, username, firstName, lastName, password, confirmPassword])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password === confirmPassword) {
       setErrors({});
-        const response = await dispatch(sessionActions.signup({ email, username, firstName, lastName, password }))
-        return response
+      return dispatch(
+        sessionActions.signup({ 
+          email, 
+          username, 
+          firstName, 
+          lastName, 
+          password 
+        })
+      )
         .then(closeModal)
         .catch(async (res) => {
           const data = await res.json();
-          if(data?.errors){
-            setErrors(data.errors)
-          }
+          if(data && data.errors) setErrors(data.errors);
         })
-    }
-     return setErrors({
+    } else {
+      setErrors({
         confirmPassword: "Confirm Password field must be the same as the Password field"
       });
     }
-      
+  }
+
 
   return (
     <div className="sign-up-container">
       <h1>Sign Up</h1>
-      {errors.email && <p className="sign-up-error">{errors.email}</p>}
+      {errors.email === "Invalid email" && <p className="sign-up-error">The provided email is invalid</p>}
+      {errors.email && errors.email !== "Invalid email" && <p className="sign-up-error">{errors.email}</p>}
       {errors.username && <p className="sign-up-error">{errors.username}</p>}
       {errors.firstName && <p className="sign-up-error">{errors.firstName}</p>}
       {errors.lastName && <p className="sign-up-error">{errors.lastName}</p>}
       {errors.password && <p className="sign-up-error">{errors.password}</p>}
-      {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
+      {errors.confirmPassword && <p className="sign-up-error">{errors.confirmPassword}</p>}
       <form onSubmit={handleSubmit}>
         <label>
           <input

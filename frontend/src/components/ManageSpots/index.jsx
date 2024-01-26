@@ -29,7 +29,7 @@ const ManageSpots = () => {
                 <button className="create-a-new-spot-button cursor" onClick={createANewSpotButton}>Create a New Spot</button>
             </div>
             {isLoaded && (<>
-            {spots.length === 0 && <button className="create-a-new-spot" onClick={createANewSpotButton}>Create a New Spot</button>}
+            {/* {spots.length === 0 && <button className="create-a-new-spot" onClick={createANewSpotButton}>Create a New Spot</button>} */}
             <div className='spot-card-container'>
                 {spots.map(spot => {
                     return (
