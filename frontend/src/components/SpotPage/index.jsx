@@ -49,20 +49,23 @@ const SpotPage = () => {
             </div>
 
             <div className='spot-show-reserve-grouping'>
-                    <p><span className='review-card-price'>${price} per night</span></p>
-                    <div className='review-card'>
-                        <ReviewStats
-                            avgStarRating={avgStarRating}
-                            numReviews={numReviews}
-                        />
+                <p><span className='review-card-price'>${price} per night</span></p>
+                <div className='review-card'>
+                    <ReviewStats
+                        avgStarRating={avgStarRating}
+                        numReviews={numReviews}
+                    />
                 </div>
                 <button className="spot-show-reserve-button cursor" onClick={reserveButtonPress}>Reserve</button>
             </div>
         </div>
-        <ReviewStats
-            avgStarRating={avgStarRating}
-            numReviews={numReviews}
-        />
+        <div className="reviews-under-description">
+            <ReviewStats
+                avgStarRating={avgStarRating}
+                numReviews={numReviews}
+            />
+
+        </div>
         <div>
             <ReviewsIndex spot={spot} spotId={spotId} ownerId={ownerId} numReviews={numReviews} />
 

@@ -44,6 +44,7 @@ const ReviewsIndex = ({spot, spotId, ownerId: spotOwnerId, numReviews}) => {
             {postReview && <div className="post-review-section">
                 <OpenModalButton 
                 buttonText="Post Your Review"
+                className="post-your-review-button cursor"
                 modalComponent={<CreateReviewForm spotId={spotId} />} />
                 {numReviews === 0 && <p>Be the first to post a review!</p>}
                </div>}

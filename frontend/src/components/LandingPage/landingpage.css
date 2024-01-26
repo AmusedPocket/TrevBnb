@@ -1,4 +1,4 @@
 .landing-page{
     display: flex;
-    flex-direction: row-reverse;
+    width: fit-content;
 }

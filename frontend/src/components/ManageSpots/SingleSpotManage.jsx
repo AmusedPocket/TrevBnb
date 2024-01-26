@@ -5,7 +5,7 @@ import DeleteSpot from "./deletespot";
 
 
 
-const SingleSpotManage = ({spot}) => {
+const SingleSpotManage = ({ spot }) => {
     const navigate = useNavigate();
 
 
@@ -13,12 +13,12 @@ const SingleSpotManage = ({spot}) => {
         navigate(`/spots/${spot.id}/edit`)
     }
 
-    return(
-        <div className="single-spot-manage">
+    return (
+        <div className="manage-spot-tile">
             <IndexItem spot={spot} />
             <div className="manage-spot-buttons">
-                <button className="update-button" onClick={updateButton}>Update Spot</button>
-                <OpenModalButton buttonText="Delete" modalComponent={<DeleteSpot spot={spot}/>}/>
+                <button className="manage-spot-button cursor" onClick={updateButton}>Update Spot</button>
+                <OpenModalButton className="manage-spot-button cursor" buttonText="Delete" modalComponent={<DeleteSpot spot={spot} />} />
             </div>
         </div>
     )

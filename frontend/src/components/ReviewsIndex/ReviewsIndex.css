@@ -1,0 +1,41 @@
+.review-content-month {
+    color: var(--lightBlue);
+    gap: 10px;
+}
+
+.review-content {
+    margin-bottom: 50px;
+}
+
+.review-button-update {
+    background-color: var(--lightBlue);
+      color: white;
+      border-radius: 10px;
+      margin: 5px;
+  }
+  
+  .review-button-update:hover{
+    box-shadow: 6px 6px 6px var(--darkBlue);
+  }
+
+  .post-your-review-button {
+    background-color: var(--lightBlue);
+    color: lightgrey;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    width: auto;
+  }
+
+  .post-your-review-button:hover{
+    box-shadow: 6px 6px 6px var(--darkBlue);
+  }
+
+  .post-your-review-button-disabled{
+    background-color: lightgrey;
+    color: darkgray;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    width: auto;
+  }
+
+ 

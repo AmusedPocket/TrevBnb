@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
 import * as sessionActions from '../../store/session';
@@ -14,100 +14,123 @@ function SignupFormModal() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
+  const [inputErrors, setInputErrors] = useState([])
+  const buttonClass = inputErrors.length >= 1 || password !== confirmPassword ? "sign-up-button-disabled" : "sign-up-button"
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    const errArr = [];
+    if (!email || !username || !firstName || !lastName || !password || !confirmPassword) errArr.push("bad");
+
+    if (username.length < 4) errArr.push("bad");
+
+    if (password.length < 6) errArr.push("bad");
+
+
+
+    setInputErrors(errArr);
+  }, [email, username, firstName, lastName])
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (password === confirmPassword) {
       setErrors({});
-      return dispatch(
-        sessionActions.signup({
-          email,
-          username,
-          firstName,
-          lastName,
-          password
-        })
-      )
+        const response = await dispatch(sessionActions.signup({ email, username, firstName, lastName, password }))
+        return response
         .then(closeModal)
         .catch(async (res) => {
           const data = await res.json();
-          if (data?.errors) {
-            setErrors(data.errors);
+          if(data?.errors){
+            setErrors(data.errors)
           }
-        });
+        })
     }
-    return setErrors({
-      confirmPassword: "Confirm Password field must be the same as the Password field"
-    });
-  };
+     return setErrors({
+        confirmPassword: "Confirm Password field must be the same as the Password field"
+      });
+    }
+      
 
   return (
-    <>
+    <div className="sign-up-container">
       <h1>Sign Up</h1>
+      {errors.email && <p className="sign-up-error">{errors.email}</p>}
+      {errors.username && <p className="sign-up-error">{errors.username}</p>}
+      {errors.firstName && <p className="sign-up-error">{errors.firstName}</p>}
+      {errors.lastName && <p className="sign-up-error">{errors.lastName}</p>}
+      {errors.password && <p className="sign-up-error">{errors.password}</p>}
+      {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
       <form onSubmit={handleSubmit}>
         <label>
-          Email
           <input
+            placeholder='E-mail'
+            className="sign-up-container-entry"
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
         </label>
-        {errors.email && <p>{errors.email}</p>}
+
         <label>
-          Username
           <input
+            placeholder="Username"
+            className="sign-up-container-entry"
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
           />
         </label>
-        {errors.username && <p>{errors.username}</p>}
+
         <label>
-          First Name
           <input
+            placeholder="First Name"
+            className="sign-up-container-entry"
             type="text"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
             required
           />
         </label>
-        {errors.firstName && <p>{errors.firstName}</p>}
+
         <label>
-          Last Name
           <input
+            placeholder="Last Name"
+            className="sign-up-container-entry"
             type="text"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             required
           />
         </label>
-        {errors.lastName && <p>{errors.lastName}</p>}
+
         <label>
-          Password
           <input
+            placeholder="Password"
+            className="sign-up-container-entry"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
         </label>
-        {errors.password && <p>{errors.password}</p>}
+
         <label>
-          Confirm Password
           <input
+            placeholder="Confirm Password"
+            className="sign-up-container-entry"
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
           />
         </label>
-        {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
-        <button type="submit">Sign Up</button>
+        <div className="sign-up-button-container">
+          <button type="submit" disabled={inputErrors.length >= 1 || password !== confirmPassword} className={buttonClass}>Sign Up</button>
+        </div>
+
       </form>
-    </>
+    </div>
   );
 }
 

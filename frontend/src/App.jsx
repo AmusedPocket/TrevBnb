@@ -10,7 +10,7 @@ import EditSpot from './components/EditSpot';
 import LandingPage from './components/LandingPage';
 import ManageSpots from './components/ManageSpots';
 import CreateASpotForm from './components/CreateSpotForm';
-
+import ManageReviewsPage from './components/ManageReviews';
 
 function App() {
   const dispatch = useDispatch();
@@ -32,6 +32,7 @@ function App() {
           <Route path='/spots/:spotId/edit' element={<EditSpot />}/>
           <Route path='/spots/new' element={<CreateASpotForm/>}/>
           <Route path='/spots/current' element={<ManageSpots/>}/>
+          <Route path='/reviews/current' element={<ManageReviewsPage/>}/>
       </Routes>
       </BrowserRouter>
     </>)

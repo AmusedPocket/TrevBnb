@@ -4,7 +4,7 @@ import { useModal } from "../../context/Modal";
 import { getSpotById } from "../../store/spots";
 import { createReview, editReview, getAllReviewsOfUser, populateReviewsInAGivenSpot } from "../../store/review";
 import StarInput from "./StarInput";
-
+import './ReviewFormStyle.css'
 
 const ReviewForm = ({review, spotId, formType, updateType}) => {
    
@@ -15,6 +15,7 @@ const ReviewForm = ({review, spotId, formType, updateType}) => {
     const [disable, setDisable] = useState(true);
     const [error, setError] = useState(null);
     const buttonText = formType === 'create' ? "Submit Your Review" : "Update Your Review";
+    const buttonClass = disable ? "post-your-review-button-disabled" : "post-your-review-button cursor"
 
     const submitForm = async (e) => {
         e.preventDefault();
@@ -72,12 +73,13 @@ const ReviewForm = ({review, spotId, formType, updateType}) => {
         <form className="review-box-form" onSubmit={submitForm}>
             {error && <p className="review-box-error">{error}</p>}
             <textarea 
+            className="review-box-form-textentry"
             value={reviewText}
             placeholder="Leave your review here..."
             onChange={(e)=> setReviewText(e.target.value)}
             />
         <StarInput stars={stars} setStars={setStars}/>
-        <button onSubmit={submitForm} disabled={disable}>{buttonText}</button>
+        <button onSubmit={submitForm} disabled={disable} className={buttonClass}>{buttonText}</button>
         </form>
     </div>)
 }

@@ -5,11 +5,11 @@ const ReviewStats = ({avgStarRating, numReviews}) => {
             <p><span><i className="fa-solid fa-star"></i></span>New</p>
         </>)
     } else {
-        return (<>
+        return (<div className="reviews-text-layout">
         <p><span><i className="fa-solid fa-star"></i></span>{Number(avgStarRating).toFixed(1)}</p>
         <p>·</p>
         <p>{numReviews} {reviewWord}</p>
-        </>)
+        </div>)
     } 
   
 }

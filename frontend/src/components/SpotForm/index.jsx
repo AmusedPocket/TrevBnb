@@ -1,4 +1,4 @@
-import { useState} from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createANewSpot, editASpot } from '../../store/spots';
 import { useNavigate } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { addImageToASpot } from '../../store/spots';
 import './style.css'
 
 
-const SpotForm = ({spot, formType}) => {
+const SpotForm = ({ spot, formType }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [address, setAddress] = useState(spot.address);
@@ -60,7 +60,7 @@ const SpotForm = ({spot, formType}) => {
         if (description.length < 29) {
             errObj.description = "Description needs a minimum of 30 characters"
         }
-        
+
         if (!name) {
             errObj.name = "Name is required"
         }
@@ -69,27 +69,27 @@ const SpotForm = ({spot, formType}) => {
             errObj.price = "Price is required"
         }
 
-        if(formType === "create"){
+        if (formType === "create") {
             if (!imgURLPreview) {
                 errObj.imgURLPreviewReqd = "Preview image is required."
             }
-    
+
             if (imgURLPreview.length > 0 && !validImage(imgURLPreview)) {
                 errObj.imgURLPreviewNotValid = "Image URL must end in .png, .jpg, or .jpeg"
             }
-    
+
             if (img1.length > 0 && !validImage(img1)) {
                 errObj.img1 = "Image URL must end in .png, .jpg, or .jpeg"
             }
-    
+
             if (img2.length > 0 && !validImage(img2)) {
                 errObj.img2 = "Image URL must end in .png, .jpg, or .jpeg"
             }
-    
+
             if (img3.length > 0 && !validImage(img3)) {
                 errObj.img3 = "Image URL must end in .png, .jpg, or .jpeg"
             }
-    
+
             if (img4.length > 0 && !validImage(img4)) {
                 errObj.img4 = "Image URL must end in .png, .jpg, or .jpeg"
             }
@@ -110,7 +110,7 @@ const SpotForm = ({spot, formType}) => {
         // console.log("errors object list is: ", errors)
         if (checkErrors()) {
             const newSpot = { country, address, city, state, lat, lng, description, name, price };
-            if(formType === "create"){
+            if (formType === "create") {
                 const response = await dispatch(createANewSpot(newSpot));
                 if (response.ok) {
                     const data = await response.json();
@@ -124,10 +124,10 @@ const SpotForm = ({spot, formType}) => {
                 }
             } else {
                 const response = await dispatch(editASpot(spot.id, newSpot))
-                if(response.ok){
+                if (response.ok) {
                     navigate(`/spots/${spot.id}`);
                 }
-            }    
+            }
         }
     }
 
@@ -186,7 +186,7 @@ const SpotForm = ({spot, formType}) => {
                 <br />
                 <div className="double-input-field">
                     <div className="row-header">
-                        Latitude 
+                        Latitude
                         {<span className="spot-form-error">{errors.lat}</span>}
                     </div>
                     <input
@@ -196,14 +196,16 @@ const SpotForm = ({spot, formType}) => {
                         onChange={(e) => setLat(e.target.value)}
                     />
                     <div className="row-header">
-                        Longitude {<span className="spot-form-error">{errors.lng}</span>}
-                        <input
-                            type="text"
-                            placeholder="Longitude"
-                            value={lng}
-                            onChange={(e) => setLng(e.target.value)}
-                        />
+                        Longitude
+                        {<span className="spot-form-error">{errors.lng}</span>}
                     </div>
+                    <input
+                        type="text"
+                        placeholder="Longitude"
+                        value={lng}
+                        onChange={(e) => setLng(e.target.value)}
+                    />
+
                 </div>
             </span>
             <span className="new-spot-section">
@@ -241,64 +243,72 @@ const SpotForm = ({spot, formType}) => {
             <span className="new-spot-section">
                 <h2>Set a base price for your spot</h2>
                 <h3>Competitive pricing can help your listing stand out and rank higher in search results.</h3>
-                <label className="single-input-field">
-                    $ <input
-                        type="text"
-                        value={price}
-                        placeholder="Price per night (USD)"
-                        onChange={(e) => setPrice(e.target.value)}
-                    />
-                    {<p className="spot-form-error">{errors.price}</p>}
-                    <br />
-                </label>
+
+                $ <input
+                    className="single-input-field"
+                    type="text"
+                    value={price}
+                    placeholder="Price per night (USD)"
+                    onChange={(e) => setPrice(e.target.value)}
+                />
+                {<p className="spot-form-error">{errors.price}</p>}
+                <br />
+
             </span>
-            {formType === "create" && 
-            (<><div className="new-spot-form-header">
-                <h2>Liven up your spot with photos</h2>
-                <h3>Submit a link to at least one photo to publish your spot.</h3>
-            </div>
-            <input
-                type="text"
-                value={imgURLPreview}
-                placeholder="Preview Image URL"
-                onChange={(e) => setIMGURLPreview(e.target.value)}
-            />
-            {<p className="spot-form-error">{errors.imgURLPreviewReqd}</p>}
-            {<p className="spot-form-error">{errors.imgURLPreviewNotValid}</p>}
-            <br />
-            <input
-                type="text"
-                value={img1}
-                placeholder="Image URL"
-                onChange={(e) => setImg1(e.target.value)}
-            />
-            {<p className="spot-form-error">{errors.img1}</p>}
-            <br />
-            <input
-                type="text"
-                value={img2}
-                placeholder="Image URL"
-                onChange={(e) => setImg2(e.target.value)}
-            />
-            {<p className="spot-form-error">{errors.img2}</p>}
-            <br />
-            <input
-                type="text"
-                value={img3}
-                placeholder="Image URL"
-                onChange={(e) => setImg3(e.target.value)}
-            />
-            {<p className="spot-form-error">{errors.img3}</p>}
-            <br />
-            <input
-                type="text"
-                value={img4}
-                placeholder="Image URL"
-                onChange={(e) => setImg4(e.target.value)}
-            />
-            {<p className="spot-form-error">{errors.img4}</p>}
-            <br /> </>)}
-            <button onClick={onSubmit}>{buttonText}</button>
+            {formType === "create" &&
+                (<div className="new-spot-section">
+                <div className="new-spot-form-header">
+                    <h2>Liven up your spot with photos</h2>
+                    <h3>Submit a link to at least one photo to publish your spot.</h3>
+                </div>
+                    <input
+                        className="single-input-field"
+                        type="text"
+                        value={imgURLPreview}
+                        placeholder="Preview Image URL"
+                        onChange={(e) => setIMGURLPreview(e.target.value)}
+                    />
+                    {<p className="spot-form-error">{errors.imgURLPreviewReqd}</p>}
+                    {<p className="spot-form-error">{errors.imgURLPreviewNotValid}</p>}
+                    <br />
+                    <input
+                        className="single-input-field"
+                        type="text"
+                        value={img1}
+                        placeholder="Image URL"
+                        onChange={(e) => setImg1(e.target.value)}
+                    />
+                    {<p className="spot-form-error">{errors.img1}</p>}
+                    <br />
+                    <input
+                        className="single-input-field"
+                        type="text"
+                        value={img2}
+                        placeholder="Image URL"
+                        onChange={(e) => setImg2(e.target.value)}
+                    />
+                    {<p className="spot-form-error">{errors.img2}</p>}
+                    <br />
+                    <input
+                        className="single-input-field"
+                        type="text"
+                        value={img3}
+                        placeholder="Image URL"
+                        onChange={(e) => setImg3(e.target.value)}
+                    />
+                    {<p className="spot-form-error">{errors.img3}</p>}
+                    <br />
+                    <input
+                        className="single-input-field"
+                        type="text"
+                        value={img4}
+                        placeholder="Image URL"
+                        onChange={(e) => setImg4(e.target.value)}
+                    />
+                    {<p className="spot-form-error">{errors.img4}</p>}
+                    <br /> 
+            </div>)}
+            <button className="spot-page-button cursor" onClick={onSubmit}>{buttonText}</button>
         </form>
     )
 }

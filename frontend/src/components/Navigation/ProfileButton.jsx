@@ -36,6 +36,7 @@ function ProfileButton({ user }) {
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
+    navigate('/')
     closeMenu();
   };
 
@@ -43,14 +44,20 @@ function ProfileButton({ user }) {
     e.preventDefault();
     navigate('/spots/current');
     closeMenu();
+  };
+
+  const manageReviews = (e) => {
+    e.preventDefault();
+    navigate('/reviews/current');
+    closeMenu();
   }
 
-  const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
+  const ulClassName = "profile-dropdown" + (showMenu ? " " : " hidden");
 
   return (
     <>
     <div className="log-in-menu">
-      <button onClick={toggleMenu} className="profile-button fa-2x">
+      <button onClick={toggleMenu} className="profile-button fa-2x cursor">
       <i className="fa fa-bars" />
         <i className="fas fa-user-circle" />
         
@@ -59,19 +66,21 @@ function ProfileButton({ user }) {
         {user ? (
           <>
             <li>Hello {user.username}</li>
-            <li>{user.firstName} {user.lastName}</li>
-            <li>{user.email}</li>
-            <li><button onClick={manageSpots}>Manage Spots</button></li>
-            <li><button onClick={logout}>Log Out</button></li>
+            <li className="profile-dropdown-lineitems">{user.email}</li>
+            <li><button onClick={manageSpots} className="cursor profile-dropdown-button">Manage Spots</button></li>
+            <li><button onClick={manageReviews} className="cursor profile-dropdown-button">Manage Reviews</button></li>
+            <li><button onClick={logout} className="cursor profile-dropdown-button">Log Out</button></li>
           </>
         ) : (
           <>
             <OpenModalMenuItem
+              className="cursor"
               itemText="Log In"
               onItemClick={closeMenu}
               modalComponent={<LoginFormModal />}
             />
             <OpenModalMenuItem
+              className="cursor"
               itemText="Sign Up"
               onItemClick={closeMenu}
               modalComponent={<SignupFormModal />}
