@@ -25,7 +25,7 @@ function Navigation({ isLoaded }) {
     ) : (
       <>
         <li>
-          <OpenModalButton
+          <OpenModalButtond
             buttonText="Log In"
             modalComponent={<LoginFormModal />}
           />
@@ -44,8 +44,8 @@ function Navigation({ isLoaded }) {
   return (
     <ul>
       <div className="nav-bar">
-        <NavLink className="home-icon-assembly" to="/"><img className="home-icon" src={navicon} />TrevBnb</NavLink>
-        <li className="nav-bar-right-side">
+        <NavLink className="home-icon-assembly" to="/"><img className="home-icon" src={navicon} /></NavLink>
+        <li className="nav-bar right-side">
           {isLoaded && sessionLinks}
         </li>
 

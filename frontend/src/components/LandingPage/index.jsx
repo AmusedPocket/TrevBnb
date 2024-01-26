@@ -2,6 +2,7 @@ import {useState, useEffect} from 'react';
 import { useDispatch, useSelector} from 'react-redux';
 import { populateSpots } from '../../store/spots';
 import SpotsIndex from '../SpotsIndex';
+import './landingpage.css';
 
 const LandingPage = () =>  {
     const dispatch = useDispatch();

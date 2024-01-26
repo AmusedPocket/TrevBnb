@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getSpotById } from '../../store/spots';
 import ReviewStats from './ReviewStats';
 import ReviewsIndex from '../ReviewsIndex/ReviewsIndex';
-
+import './spotpage.css'
 
 const SpotPage = () => {
     const { spotId } = useParams();
@@ -34,11 +34,11 @@ const SpotPage = () => {
 
     return (isLoaded && <div className='spot-page'>
 
-        <h1>{name}</h1>
+        <h1 className="spot-page-title">{name}</h1>
         <p>{city}, {state}, {country}</p>
         <div className='spot-show-images'>
-            {spot.SpotImages.map(image => {
-                const imageClassName = image.preview ? "spot-show-image spot-show-preview" : "spot-show-image";
+            {spot.SpotImages.map((image, id) => {
+                const imageClassName = image.preview ? `spot-show-image spot-show-preview spot-show-image-${id}` : "spot-show-image";
                 return (<img className={imageClassName} key={image.url} src={image.url} alt={image.url} />)
             })}
         </div>
@@ -47,18 +47,17 @@ const SpotPage = () => {
                 <h3>Hosted by {Owner.firstName} {Owner.lastName} </h3>
                 <p>{description}</p>
             </div>
-        </div>
-        <div className='spot-show-order'>
-            <div className='spot-show-card-first-line'>
-                <p><span className='spot-show-price'>${price}</span> per night</p>
-                <div className='review-card'>
-                    <ReviewStats
-                        avgStarRating={avgStarRating}
-                        numReviews={numReviews}
-                    />
+
+            <div className='spot-show-reserve-grouping'>
+                    <p><span className='review-card-price'>${price} per night</span></p>
+                    <div className='review-card'>
+                        <ReviewStats
+                            avgStarRating={avgStarRating}
+                            numReviews={numReviews}
+                        />
                 </div>
+                <button className="spot-show-reserve-button cursor" onClick={reserveButtonPress}>Reserve</button>
             </div>
-            <button onClick={reserveButtonPress}>Reserve</button>
         </div>
         <ReviewStats
             avgStarRating={avgStarRating}
