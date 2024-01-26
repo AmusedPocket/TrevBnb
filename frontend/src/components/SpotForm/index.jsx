@@ -246,7 +246,7 @@ const SpotForm = ({ spot, formType }) => {
 
                 $ <input
                     className="single-input-field"
-                    type="text"
+                    type="number"
                     value={price}
                     placeholder="Price per night (USD)"
                     onChange={(e) => setPrice(e.target.value)}

@@ -13,21 +13,15 @@ function SignupFormModal() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [disableButton, setDisableButton] = useState(false)
   const { closeModal } = useModal();
-  const [inputErrors, setInputErrors] = useState([])
-  const buttonClass = inputErrors.length >= 1 || password !== confirmPassword ? "sign-up-button-disabled" : "sign-up-button"
+
+  const buttonClass = !disableButton || password !== confirmPassword ? "sign-up-button-disabled" : "sign-up-button"
 
   useEffect(() => {
-    const errArr = [];
-    if (!email || !username || !firstName || !lastName || !password || !confirmPassword) errArr.push("bad");
+    if (!email || !username || !firstName || !lastName || !password || !confirmPassword || username.length < 4 || password.length < 6) setDisableButton(false);
 
-    if (username.length < 4) errArr.push("bad");
-
-    if (password.length < 6) errArr.push("bad");
-
-
-
-    setInputErrors(errArr);
+    else setDisableButton(true)
   }, [email, username, firstName, lastName])
 
   const handleSubmit = async (e) => {
@@ -126,7 +120,7 @@ function SignupFormModal() {
           />
         </label>
         <div className="sign-up-button-container">
-          <button type="submit" disabled={inputErrors.length >= 1 || password !== confirmPassword} className={buttonClass}>Sign Up</button>
+          <button type="submit" disabled={!disableButton} className={buttonClass}>Sign Up</button>
         </div>
 
       </form>

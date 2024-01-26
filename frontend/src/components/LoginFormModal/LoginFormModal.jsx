@@ -12,6 +12,7 @@ function LoginFormModal() {
   const [buttonDisable, setButtonDisable] = useState(true)
   const { closeModal } = useModal();
   const buttonClass = buttonDisable ? "log-in-modal-button-disabled" : "log-in-modal-button"
+  const errorText = errors === "Invalid credentials" ? "The provided credentials were invalid" : null
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
@@ -69,9 +70,10 @@ function LoginFormModal() {
           />
         </div>
 
-        {errors && <p className="log-in-modal-error">{errors}</p>}
+        {/* {errors && <p className="log-in-modal-error">{errors}</p>} */}
+        {errors && <p className="log-in-modal-error">{errorText || errors}</p>}
         <button type="submit" disabled={buttonDisable} className={buttonClass}>Log In</button>
-        <button type="demoUser" className="log-in-modal-button cursor" onClick={demoUserLogIn}>Demo User</button>
+        <button type="demoUser" className="log-in-modal-button cursor" onClick={demoUserLogIn}>Log In as Demo User</button>
       </form>
     </div>
   );

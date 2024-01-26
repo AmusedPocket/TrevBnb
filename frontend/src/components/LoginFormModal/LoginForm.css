@@ -12,12 +12,13 @@
 .log-in-modal-button-disabled {
     padding: 5px;
     width: 100%;
-    background-color: var(--darkBlue);
-    color: lightgrey;
+    background-color: lightgray;
+    color: darkgray;
     border-radius: 10px;
     grid-area: reserve;
     margin-bottom: 20px;
 }
+
 
 .log-in-modal-button {
     cursor: pointer;
@@ -40,6 +41,8 @@
     font-style: italic;
     align-items: center;
     justify-content: center;
+    text-align: center;
     display: flex;
+    width: 200px;
 }
 

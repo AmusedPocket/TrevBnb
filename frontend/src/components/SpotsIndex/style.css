@@ -123,44 +123,67 @@
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     justify-self: stretch;
+    height: fit-content;
     gap: 5px;
     grid-template-areas:
         "big-pic big-pic small-pic-1 small-pic-2"
         "big-pic big-pic small-pic-3 small-pic-4"
     ;
+    margin-bottom: 30px;
 }
 
 .spot-show-image {
-    width: 90%;
-    height: 90%;
+    width: 100%;
+    height: 100%;
     margin: auto;
     border-radius: 60px;
-    padding: 10px;
+    /* object-fit: fill; */
+    /* padding: 10px; */
 }
 
 .spot-show-image-0 {
-    width: 100%;
-    height: 95%;
+    /* width: 769px;
+    height: 513px; */
     grid-area: big-pic;
     border: none;
     float: none;
+    object-fit: fill;
 }
 
 .spot-show-image-1 {
     grid-area: small-pic-1;
-
+    /* width: fit-content;
+    height: 257px; */
+    border: none;
+    float: none;
+    object-fit: contain;
 }
 
 .spot-show-image-2 {
-    grid-area: small-pic-2
+    grid-area: small-pic-2;
+    /* width: fit-content;
+    height: 257px; */
+    border: none;
+    float: none;
+    object-fit: contain;
 }
 
 .spot-show-image-3 {
-    grid-area: small-pic-3
+    grid-area: small-pic-3;
+    /* width: fit-content;
+    height: 257px; */
+    border: none;
+    float: none;
+    object-fit: contain;
 }
 
 .spot-show-image-4 {
-    grid-area: small-pic-4
+    grid-area: small-pic-4;
+    /* width: fit-content;
+    height: 257px; */
+    border: none;
+    float: none;
+    object-fit: contain;
 }
 
 .spot-show-info {
@@ -180,10 +203,11 @@
     border-radius: 30px;
     list-style-type: none;
     box-shadow: 0px 0px 40px 3px var(--lightBlue);
+    align-items: center;
     display: grid;
     grid-auto-columns: 1fr;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: .5fr .1fr .5fr;
+    grid-template-rows: 1fr .2fr 1fr;
     gap: 0px 0px;
     padding: 10px;
     grid-template-areas:
@@ -213,6 +237,9 @@
 
 .review-card-price {
     grid-area: price;
+    justify-items: center;
+    align-items: center;
+    
 }
 
 .spot-show-reserve-button {
@@ -221,6 +248,9 @@
     border-radius: 10px;
     grid-area: reserve;
     margin-bottom: 20px;
+    height: 70%;
+    font-size: large;
+    font-weight: bold;
 }
 
 .spot-show-reserve-button:hover {

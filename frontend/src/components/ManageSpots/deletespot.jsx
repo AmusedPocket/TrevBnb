@@ -21,7 +21,7 @@ const DeleteSpot = ({ spot }) => {
     
     return (<div className="delete-modal">
         <h2>Confirm Delete</h2>
-        <p>Please confirm if you want to delete this spot.</p>
+        <p>Are you sure you want to remove this spot?</p>
         <button className="delete-button yes-delete cursor" onClick={yesButtonClicked}>Yes (Delete Spot)</button>
         <button className="delete-button no-delete cursor" onClick={noButtonClicked}>No (Keep Spot)</button>
     </div>)

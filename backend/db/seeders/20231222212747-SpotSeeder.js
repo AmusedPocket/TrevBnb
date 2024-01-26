@@ -79,7 +79,7 @@ const validSpots = [
     lng: -4.39,
     name: "Famed Maybeck Mansion and Botanical Park",
     description: "A 4500 sq ft. home designed by the architect of the Palace of Fine Arts, Bernard Maybeck in the midst of a landscaped botanical park. The residence is in a hidden enclave close to the University of California Berkeley and the Claremont Hotel. Past guests include movie stars, iconic chefs such as Julia Childs, Academy award winning music has been composed on the piano in the living room and we look forward to hosting you as well.",
-    price: 2500
+    price: 500
   },
   {
     ownerId: 1,

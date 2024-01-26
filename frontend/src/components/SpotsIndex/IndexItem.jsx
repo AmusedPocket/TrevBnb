@@ -9,8 +9,6 @@ const IndexItem = ({spot}) => {
         navigate(url)
     }
 
-    console.log(spot.avgRating)
-
     return(<>
         <div onClick={clickOnSpot} className="spot-tile cursor">
             <div className='tooltip'>

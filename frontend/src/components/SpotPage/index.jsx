@@ -49,7 +49,7 @@ const SpotPage = () => {
             </div>
 
             <div className='spot-show-reserve-grouping'>
-                <p><span className='review-card-price'>${price} per night</span></p>
+                <p><span className='review-card-price'>${price} night</span></p>
                 <div className='review-card'>
                     <ReviewStats
                         avgStarRating={avgStarRating}
